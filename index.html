@@ -218,10 +218,23 @@ dialog{margin:auto;inset:0}
 .hero::before{background:none}
 .hero h1,.hero p{text-shadow:0 2px 16px #0000008c}
 #home section:nth-of-type(even){background:transparent}
+
+.top .loc{pointer-events:auto;display:flex;align-items:center;gap:6px;height:38px;padding:0 13px;border-radius:99px;border:1px solid #163d3240;background:#ffffff80;color:var(--green);font-weight:700;font-size:.85rem;cursor:pointer;max-width:150px}
+.top .loc svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.top .loc span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.onhero .top .loc{background:#ffffff26;border-color:#ffffff66;color:#fff}
+.tw{gap:10px}.brand{flex:none}
+
+/* ===== Glass navbar (blur 5px) + shading removed ===== */
+.pill,.circ{background:rgba(255,255,255,.28);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);border:1px solid rgba(255,255,255,.6);box-shadow:inset 0 1px 0 rgba(255,255,255,.7)}
+nav button{color:#3d4640}
+nav button.on{background:rgba(255,255,255,.55);color:#111}
+.circ{color:#111}
+.hero h1,.hero p,.onhero .top{text-shadow:none}
 </style>
 </head>
 <body>
-<header class="top"><div class="tw"><div class="brand"><span class="mk"></span>Verdane</div><button class="sv" aria-label="Saved resorts" onclick="showSaved()"><svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg><span class="sb" id="sb"></span></button></div></header>
+<header class="top"><div class="tw"><div class="brand"><span class="mk"></span>Verdane</div><button class="loc" aria-label="Your detected location. Tap to refresh" onclick="autoLoc(true)"><svg viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span id="lc">Detecting…</span></button><button class="sv" aria-label="Saved resorts" onclick="showSaved()"><svg viewBox="0 0 24 24"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/></svg><span class="sb" id="sb"></span></button></div></header>
 <nav aria-label="Main">
  <div class="pill">
   <button data-p="home" class="hm on" aria-label="Home"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span class="lb">Home</span></button>
@@ -299,20 +312,20 @@ function modal(title,html){dlg.innerHTML=`<div class="dh"><h3>${title}</h3><butt
 function confirmBox(msg,yes,label='Confirm'){modal('Please confirm',`<p>${msg}</p><div class="row"><button class="btn d" id="cy">${label}</button><button class="btn o" onclick="dlg.close()">Keep it</button></div>`);$('#cy').onclick=()=>{dlg.close();yes()}}
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 /* ===== Navigation ===== */
-function badge(){const sb=$('#sb');if(sb)sb.textContent=S.favs.length||'';const n=S.bookings.filter(b=>b.status==='Upcoming').length+S.tickets.filter(t=>t.status==='Upcoming').length;$('#bd').textContent=n||''}
+function badge(){const lc=$('#lc');if(lc)lc.textContent=S.city||locMsg;const sb=$('#sb');if(sb)sb.textContent=S.favs.length||'';const n=S.bookings.filter(b=>b.status==='Upcoming').length+S.tickets.filter(t=>t.status==='Upcoming').length;$('#bd').textContent=n||''}
 function go(p){badge();document.body.classList.toggle('onhero',p==='home');$$('.page').forEach(x=>x.classList.toggle('on',x.id===p));$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===(p==='detail'||p==='checkout'?D.from:p)));({home:rHome,resorts:rResorts,activities:rActs,detail:rDetail,checkout:rCheckout,bookings:rBookings,profile:rProfile})[p]();scrollTo({top:0,behavior:'instant'});try{history.replaceState(null,'','#'+p)}catch(e){}}
 $$('nav button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 $$('[data-info]').forEach(a=>a.onclick=()=>modal(a.dataset.info,`<p>${a.dataset.info} page placeholder for this demo. Contact: hello@verdane.example (not a real inbox).</p>`));
 /* ===== Cards ===== */
 const stars=r=>`★ ${r.rating.toFixed(1)}`;
-function card(r){const f=S.favs.includes(r.id);return `<article class="card"><div class="im" style='background-image:${cover(r)}'><button class="fav" aria-label="Favourite" onclick="fav('${r.id}')">${f?'♥':'♡'}</button><span class="rate">${stars(r)}</span></div><div class="b"><h3>${esc(r.name)}</h3><div class="sub">${esc(r.city)}, ${esc(r.state)} · ${stars(r)}</div><p class="sub" style="margin:6px 0"><span class="tag ok">Available</span><span class="tag">${r.type}</span></p><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span class="price">${money(r.price)}<span class="sub"> /night</span></span><button class="btn g sm" onclick="detail('${r.id}')">View Details</button></div></div></article>`}
+function card(r){const f=S.favs.includes(r.id);return `<article class="card"><div class="im" style='background-image:${cover(r)}'><button class="fav" aria-label="Favourite" onclick="fav('${r.id}')">${f?'♥':'♡'}</button><span class="rate">${stars(r)}</span></div><div class="b"><h3>${esc(r.name)}</h3><div class="sub">${esc(r.city)}, ${esc(r.state)} · ${stars(r)}</div><p class="sub" style="margin:6px 0"><span class="tag ok">Available</span><span class="tag">${r.type}</span>${kmTxt(r)?`<span class="tag">${kmTxt(r)}</span>`:''}</p><div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px"><span class="price">${money(r.price)}<span class="sub"> /night</span></span><button class="btn g sm" onclick="detail('${r.id}')">View Details</button></div></div></article>`}
 function fav(id){const i=S.favs.indexOf(id);i<0?S.favs.push(id):S.favs.splice(i,1);save();toast(i<0?'Saved to favourites':'Removed from favourites');const p=$('.page.on').id;go(p)}
 /* ===== Home ===== */
 function rHome(){const dests=[['Kerala','r1'],['Goa','r5'],['Munnar','r2'],['Wayanad','r3'],['Kovalam','r8'],['Jaipur','r6'],['Manali','r7'],['Kozhikode','r4']];
 $('#home').innerHTML=`<header class="hero"><div class="hsl">${[0,4,1,7,2].map(k=>`<div class="sl" style='background-image:${SEED[k].img.replace('w=900','w=1600')}'></div>`).join('')}</div><div class="wrap"><h1>Discover Your Perfect Escape.</h1><p>Exceptional stays, breathtaking destinations, unforgettable experiences.</p><div class="hbtn"><button class="btn" onclick="go('resorts')">Explore Resorts</button><button class="btn o" onclick="go('activities')">Explore Activities</button></div><div class="hdots">${[0,1,2,3,4].map(i=>`<button aria-label="Show photo ${i+1}"></button>`).join('')}</div></div></header>
-<section><div class="wrap"><h2>Featured luxury resorts</h2><div class="grid hs">${[...all()].sort((a,b)=>b.rating-a.rating).slice(0,6).map(card).join('')}</div></div></section>
+<section><div class="wrap"><h2>${S.city?'Resorts near '+S.city:'Featured luxury resorts'}</h2><div class="grid hs">${[...all()].sort((a,b)=>S.city?((dist(a)??1e9)-(dist(b)??1e9)||b.rating-a.rating):b.rating-a.rating).slice(0,6).map(card).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><h2>Popular destinations</h2><div class="grid hs">${dests.map(([d,id])=>`<button class="dest" style='background-image:linear-gradient(0deg,#0008,#0000),${find(id).img}' onclick="searchFor('${d}')">${d}</button>`).join('')}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><h2>Nearest activities</h2><div class="grid hs">${ACTS.slice(0,5).map(actCard).join('')}</div></div></section>
+<section style="padding-top:0"><div class="wrap"><h2>${S.city?'Activities near '+S.city:'Popular activities'}</h2><div class="grid hs">${[...ACTS].sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9)).slice(0,5).map(actCard).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><h2>Recommended stays</h2><div class="grid hs">${all().slice(3).map(card).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="card b" style="background:var(--green);color:#fff;padding:32px"><h2 style="margin-bottom:8px">Exclusive offer: 15% off 3+ nights</h2><p class="sub" style="color:#cfe0d8;margin-bottom:16px">Demo offer for display. Use code STAY15 — not applied in this demo's pricing.</p><button class="btn" onclick="go('resorts')">Browse stays</button></div></div></section>`;
 heroStart()}
@@ -320,7 +333,7 @@ let Q={q:'',max:20000,rating:0,type:'',am:[],sort:'pop',in:'',out:'',g:2};
 function searchFor(q,a='',b='',g=2){Q={...Q,q,in:a,out:b,g:+g};go('resorts')}
 /* ===== Resorts ===== */
 function rResorts(){const el=$('#resorts');
-el.innerHTML=`<section style="padding-top:100px"><div class="wrap"><h2>Find your stay</h2><div class="bar"><input id="q" placeholder="Search name, city or state" value="${esc(Q.q)}" style="flex:2 1 240px"><select id="sort"><option value="pop">Most popular</option><option value="pl">Price: low to high</option><option value="ph">Price: high to low</option><option value="rt">Top rated</option></select><select id="ty"><option value="">All types</option>${TYPES.map(t=>`<option>${t}</option>`).join('')}</select><select id="rt"><option value="0">Any rating</option><option value="4">4.0+</option><option value="4.5">4.5+</option></select></div>
+el.innerHTML=`<section style="padding-top:100px"><div class="wrap"><h2>Find your stay</h2><div class="bar"><input id="q" placeholder="Search name, city or state" value="${esc(Q.q)}" style="flex:2 1 240px"><select id="sort"><option value="near">Nearest to me</option><option value="pop">Most popular</option><option value="pl">Price: low to high</option><option value="ph">Price: high to low</option><option value="rt">Top rated</option></select><select id="ty"><option value="">All types</option>${TYPES.map(t=>`<option>${t}</option>`).join('')}</select><select id="rt"><option value="0">Any rating</option><option value="4">4.0+</option><option value="4.5">4.5+</option></select></div>
 <div class="bar"><label>Max price: <b id="pv">${money(Q.max)}</b><input type="range" id="mx" min="2000" max="20000" step="500" value="${Q.max}"></label></div>
 <div class="chips" style="margin-bottom:20px">${AMEN.map(a=>`<label><input type="checkbox" value="${a}" ${Q.am.includes(a)?'checked':''}>${a}</label>`).join('')}</div><div id="rg" class="grid"></div></div></section>`;
 $('#sort').value=Q.sort;$('#ty').value=Q.type;$('#rt').value=Q.rating;
@@ -328,7 +341,7 @@ const upd=()=>{Q.q=$('#q').value;Q.sort=$('#sort').value;Q.type=$('#ty').value;Q
 $$('#resorts input,#resorts select').forEach(i=>i.oninput=upd);
 $('#rg').innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';setTimeout(list,250)}
 function list(){let L=all().filter(r=>(`${r.name} ${r.city} ${r.state}`).toLowerCase().includes(Q.q.toLowerCase())&&r.price<=Q.max&&r.rating>=Q.rating&&(!Q.type||r.type===Q.type)&&Q.am.every(a=>r.am.includes(a)));
-const k={pop:(a,b)=>b.pop-a.pop,pl:(a,b)=>a.price-b.price,ph:(a,b)=>b.price-a.price,rt:(a,b)=>b.rating-a.rating}[Q.sort];L.sort(k);
+const k={near:(a,b)=>(dist(a)??1e9)-(dist(b)??1e9)||b.pop-a.pop,pop:(a,b)=>b.pop-a.pop,pl:(a,b)=>a.price-b.price,ph:(a,b)=>b.price-a.price,rt:(a,b)=>b.rating-a.rating}[Q.sort];L.sort(k);
 const g=$('#rg');if(g)g.innerHTML=L.length?L.map(card).join(''):`<div class="empty" style="grid-column:1/-1"><h3>No stays match yet</h3><p>Try a higher price limit or remove an amenity filter.</p><button class="btn g sm" style="margin-top:12px" onclick="Q={q:'',max:20000,rating:0,type:'',am:[],sort:'pop',in:'',out:'',g:2};rResorts()">Clear filters</button></div>`}
 /* ===== Detail ===== */
 /* ===== Booking flow ===== */
@@ -409,8 +422,8 @@ let AC={q:'',cat:''};
 const actOf=id=>ACTS.find(a=>a.id===id);
 function rActs(){$('#activities').innerHTML=`<section style="padding-top:100px"><div class="wrap"><h2>Activities & tickets</h2><input id="aq" placeholder="Search activity or destination" value="${esc(AC.q)}" style="margin-bottom:14px"><div class="tabs">${['',...ACAT].map(c=>`<button class="${c===AC.cat?'on':''}" onclick="AC.cat='${c}';rActs()">${c||'All'}</button>`).join('')}</div><div id="ag" class="grid"></div></div></section>`;
 $('#aq').oninput=e=>{AC.q=e.target.value;actList()};actList()}
-function actCard(a){return `<article class="card"><div class="im" style='background-image:${a.img}'><span class="rate">★ ${a.rating.toFixed(1)}</span></div><div class="b"><h3>${esc(a.name)}</h3><div class="sub">${esc(a.city)} · ${a.dur}</div><p class="sub" style="margin:6px 0">${esc(a.desc)}</p><span class="tag">${a.cat}</span><div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><span class="price">${money(a.price)}<span class="sub"> /ticket</span></span><button class="btn g sm" onclick="aDetail('${a.id}')">View Details</button></div></div></article>`}
-function actList(){const L=ACTS.filter(a=>(a.name+' '+a.city).toLowerCase().includes(AC.q.toLowerCase())&&(!AC.cat||a.cat===AC.cat));
+function actCard(a){return `<article class="card"><div class="im" style='background-image:${a.img}'><span class="rate">★ ${a.rating.toFixed(1)}</span></div><div class="b"><h3>${esc(a.name)}</h3><div class="sub">${esc(a.city)} · ${a.dur}${kmTxt(a)?' · '+kmTxt(a):''}</div><p class="sub" style="margin:6px 0">${esc(a.desc)}</p><span class="tag">${a.cat}</span><div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><span class="price">${money(a.price)}<span class="sub"> /ticket</span></span><button class="btn g sm" onclick="aDetail('${a.id}')">View Details</button></div></div></article>`}
+function actList(){const L=ACTS.filter(a=>(a.name+' '+a.city).toLowerCase().includes(AC.q.toLowerCase())&&(!AC.cat||a.cat===AC.cat)).sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9));
 $('#ag').innerHTML=L.length?L.map(actCard).join(''):'<div class="empty" style="grid-column:1/-1"><h3>No activities found</h3><p>Try another destination or choose All.</p></div>'}
 function tForm(id){const a=actOf(id);const slots=['9:00 AM','1:00 PM','4:30 PM'];
 modal('Book tickets — '+esc(a.name),`<form id="tf" novalidate><div class="two"><div><label>Date<input type="date" id="td" min="${today()}"></label><div class="err" id="e_td"></div></div><div><label>Time slot<select id="ts">${slots.map(x=>`<option>${x}</option>`).join('')}</select></label></div><div><label>Adults (${money(a.price)})<input type="number" id="ta" min="1" max="10" value="2"></label><div class="err" id="e_ta"></div></div><div><label>Children (50% price)<input type="number" id="tc" min="0" max="10" value="0"></label><div class="err" id="e_tc"></div></div><div><label>Name<input id="tn" value="${esc(S.profile.name)}"></label><div class="err" id="e_tn"></div></div><div><label>Email<input id="te" type="email" value="${esc(S.profile.email)}"></label><div class="err" id="e_te"></div></div></div><div class="sum" id="ts2"></div><p class="sub">Demo only: no payment is taken and no real ticket is issued.</p><div class="row"><button class="btn g">Review &amp; confirm</button></div></form>`);
@@ -466,8 +479,21 @@ function heroStart(){clearInterval(heroT);heroI=0;const sl=$$('.hsl .sl'),dt=$$(
 const show=i=>{heroI=i;sl.forEach((x,k)=>x.classList.toggle('on',k===i));dt.forEach((x,k)=>x.classList.toggle('on',k===i))};
 const restart=()=>{clearInterval(heroT);heroT=setInterval(()=>{if($('#home').classList.contains('on'))show((heroI+1)%sl.length)},4500)};
 dt.forEach((x,k)=>x.onclick=()=>{show(k);restart()});show(0);restart()}
+/* ===== Location (city based) ===== */
+const CITIES={Alleppey:[9.4981,76.3388],Munnar:[10.0889,77.0595],Wayanad:[11.6854,76.132],Kozhikode:[11.2588,75.7804],Kochi:[9.9312,76.2673],Kovalam:[8.4004,76.9787],Thiruvananthapuram:[8.5241,76.9366],Candolim:[15.518,73.762],Goa:[15.4909,73.8278],Jaipur:[26.9124,75.7873],Manali:[32.2432,77.1892],Bengaluru:[12.9716,77.5946],Chennai:[13.0827,80.2707],Hyderabad:[17.385,78.4867],Mumbai:[19.076,72.8777],Delhi:[28.6139,77.209]};
+const hav=(a,b)=>{const t=x=>x*Math.PI/180,dl=t(b[0]-a[0]),dg=t(b[1]-a[1]),q=Math.sin(dl/2)**2+Math.cos(t(a[0]))*Math.cos(t(b[0]))*Math.sin(dg/2)**2;return 12742*Math.asin(Math.sqrt(q))};
+const dist=r=>S&&S.city&&CITIES[S.city]&&CITIES[r.city]?hav(CITIES[S.city],CITIES[r.city]):null;
+const kmTxt=r=>{const d=dist(r);return d==null?'':d<20?'In your area':Math.round(d)+' km away'};
+let locMsg='Detecting\u2026';
+function autoLoc(manual){if(!navigator.geolocation){locMsg='Location off';badge();return}
+locMsg='Detecting\u2026';badge();
+navigator.geolocation.getCurrentPosition(p=>{const here=[p.coords.latitude,p.coords.longitude];let best='',bd=1e9;for(const c in CITIES){const d=hav(here,CITIES[c]);if(d<bd){bd=d;best=c}}
+S.city=best;save();Q.sort='near';badge();if(manual)toast('Showing places near '+best);const pg=$('.page.on').id;if(['home','resorts','activities'].includes(pg))go(pg)},
+()=>{locMsg='Location off';badge();if(manual)toast('Allow location access in your browser to see nearby places')},{timeout:10000,maximumAge:600000})}
 /* ===== Init ===== */
 go(['home','resorts','activities','bookings','profile'].includes(location.hash.slice(1))?location.hash.slice(1):'home');
+if(S.city)Q.sort='near';
+autoLoc();
 </script>
 </body>
 </html>
