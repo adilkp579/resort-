@@ -6,7 +6,7 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%23163D32%27/%3E%3C/svg%3E">
 <title>Verdane — Resorts & Stays</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
 <style>
 /* ===== Design tokens ===== */
 :root{--bg:#FAF9F6;--green:#163D32;--ink:#202522;--gold:#C5A46D;--line:#e6e2d8;--card:#fff;--muted:#6b726d;--r:20px}
@@ -231,6 +231,144 @@ nav button{color:#3d4640}
 nav button.on{background:rgba(255,255,255,.55);color:#111}
 .circ{color:#111}
 .hero h1,.hero p,.onhero .top{text-shadow:none}
+
+/* ===== Resort search (soft rounded fields) ===== */
+#resorts{position:relative}
+#resorts::before{content:"";position:absolute;top:0;right:0;width:260px;height:240px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 240'%3E%3Cg fill='%23163D32' opacity='.13'%3E%3Cpath d='M260 0Q150 20 90 110Q170 90 260 60z'/%3E%3Cpath d='M260 40Q170 80 130 170Q200 140 260 110z'/%3E%3Cpath d='M260 90Q200 130 190 210Q240 170 260 160z'/%3E%3C/g%3E%3C/svg%3E") no-repeat right top/contain;filter:blur(2px);pointer-events:none}
+.fh{font-size:clamp(3rem,13vw,5rem);line-height:1;font-weight:700;margin-bottom:14px;letter-spacing:-.02em}
+.fh em{font-style:italic;font-weight:500}
+.rule{display:block;width:64px;height:3px;border-radius:3px;background:#7a9a88}
+.fld{display:flex;align-items:center;gap:14px;min-height:68px;padding:10px 18px 10px 12px;border-radius:28px;background:rgba(255,255,255,.78);border:1px solid #e8e5da;box-shadow:0 8px 22px #1b3a2d14;margin:0;position:relative;color:var(--ink);font-size:1.05rem;font-weight:500}
+.fld:focus-within{border-color:var(--gold)}
+.fld .ic{flex:none;width:46px;height:46px;border-radius:50%;background:#eef2ec;display:grid;place-items:center}
+.fld svg{width:22px;height:22px;fill:none;stroke:#1f5a40;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fld input:not([type=range]),.fld select{border:0;background:transparent;padding:0;margin:0;min-height:46px;font-size:1.05rem;font-weight:500;flex:1;min-width:0;box-shadow:none;border-radius:0}
+.fld input:focus,.fld select:focus{box-shadow:none;border:0}
+.fld select{padding-right:26px;cursor:pointer;text-overflow:ellipsis}
+.fld .chv{position:absolute;right:16px;top:50%;margin-top:-10px;width:20px;height:20px;stroke:#3d4640;pointer-events:none}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0}
+@media(max-width:899px){.rtg{grid-column:1/-1}}
+@media(min-width:900px){.fgrid{grid-template-columns:repeat(3,1fr)}}
+.fld.price{display:block;padding:18px 20px;margin-bottom:14px}
+.prow{display:flex;align-items:center;gap:14px;font-size:1.05rem}
+.prow b{color:#1f5a40;font-size:1.5rem;font-weight:800}
+.fld input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:10px;min-height:0;padding:0;margin:20px 0 8px;border:0;border-radius:99px;background:linear-gradient(to right,#2d6a4f var(--p,100%),#e4e6df var(--p,100%));cursor:pointer}
+.fld input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:#2d6a4f;border:4px solid #fff;box-shadow:0 2px 10px #0003}
+.fld input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#2d6a4f;border:4px solid #fff;box-shadow:0 2px 10px #0003}
+.amg{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+@media(max-width:520px){.amg{grid-template-columns:1fr 1fr}}
+.chips label.amt{display:flex;align-items:center;gap:10px;margin:0;padding:14px 12px;border-radius:22px;background:rgba(255,255,255,.78);border:1px solid #e8e5da;box-shadow:0 8px 22px #1b3a2d10;color:var(--ink);font-weight:600;font-size:.92rem;cursor:pointer}
+.amt svg{width:26px;height:26px;flex:none;fill:none;stroke:#1f5a40;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.chips .amt input{-webkit-appearance:none;appearance:none;width:22px;height:22px;min-height:0;flex:none;margin:0;padding:0;border:2px solid #cfd3c9;border-radius:7px;background:#fff;display:grid;place-content:center;cursor:pointer}
+.chips .amt input:checked{background:#2d6a4f;border-color:#2d6a4f}
+.chips .amt input:checked::after{content:"";width:5px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.amt:has(input:checked){border-color:#2d6a4f}
+
+/* ===== Slimmer fields + collapsible amenities ===== */
+.fld{min-height:54px;padding:6px 14px 6px 8px;border-radius:22px;gap:12px;box-shadow:0 5px 14px #1b3a2d10}
+.fld .ic{width:38px;height:38px}
+.fld svg{width:20px;height:20px}
+.fld input:not([type=range]),.fld select{min-height:38px;font-size:1rem}
+.fld .chv{width:18px;height:18px;margin-top:-9px;right:14px}
+.fgrid{gap:10px;margin:10px 0;grid-template-columns:1fr 1fr!important}
+.fld.price{padding:12px 16px;margin-bottom:10px}
+.prow{gap:12px;font-size:1rem}.prow b{font-size:1.25rem}
+.fld input[type=range]{height:8px;margin:14px 0 6px}
+.fld input[type=range]::-webkit-slider-thumb{width:26px;height:26px;border-width:3px}
+.amh{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:50px;padding:6px 18px;margin-bottom:10px;border-radius:22px;background:rgba(255,255,255,.78);border:1px solid #e8e5da;box-shadow:0 5px 14px #1b3a2d10;color:var(--ink);font-size:1rem;font-weight:600;cursor:pointer}
+.amh .cnt{font-weight:600;color:#1f5a40}
+.amh svg{width:20px;height:20px;fill:none;stroke:#3d4640;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .3s}
+.amh.open svg{transform:rotate(180deg)}
+.amg[hidden]{display:none}
+.amg{gap:10px}
+.chips label.amt{padding:9px 10px;border-radius:18px;gap:8px;font-size:.88rem;box-shadow:0 5px 14px #1b3a2d0d}
+.amt svg{width:22px;height:22px}
+.chips .amt input{width:20px;height:20px}
+.amg:not([hidden]){animation:in .3s ease}
+
+/* ===== Smaller cards ===== */
+.grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card .im{aspect-ratio:3/2;margin:6px;border-radius:18px}
+.card .b{padding:6px 14px 14px}
+.card h3{font-size:1.15rem}
+.card .sub{font-size:.8rem}
+.card .price{font-size:1.05rem}
+.card .btn.sm{padding:7px 14px;font-size:.8rem;min-height:36px}
+.card .tag{font-size:.68rem;padding:3px 9px}
+.card .rate{left:10px;bottom:10px;font-size:.72rem;padding:3px 10px}
+.card .fav{width:34px;height:34px;top:8px;right:8px;font-size:1rem}
+.hs{gap:14px}
+.hs>*{flex:0 0 min(62vw,225px)}
+.hs>.dest{flex-basis:min(50vw,180px)}
+.dest{height:150px;font-size:1.5rem;padding:12px}
+.skel{height:190px}
+.bk .im{width:110px;min-height:90px}
+@media(max-width:520px){
+ .grid:not(.hs){grid-template-columns:repeat(2,1fr);gap:10px}
+ .card .b>div[style*="space-between"]{flex-direction:column;align-items:flex-start!important;gap:8px}
+ .card .b{padding:4px 10px 12px}
+ .card h3{font-size:1.05rem}
+}
+
+/* ===== Upload photo slots (3:4) ===== */
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.slot{display:block;aspect-ratio:3/4;border:2px dashed #cfd3c9;border-radius:16px;background:#fff center/cover no-repeat;position:relative;cursor:pointer;overflow:hidden;margin:0}
+.slot.main{border-color:var(--gold)}.slot.set{border-style:solid;border-color:#fff}
+.slot span{position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:.72rem;font-weight:700;padding:6px 2px;background:#163d32cc;color:#fff}
+
+/* ===== Profile top card ===== */
+.pc{position:relative;border-radius:32px;overflow:hidden;background:#fff;border:2px solid #fff;box-shadow:0 10px 30px #1b3a2d14}
+.pcv{position:absolute;inset:0 0 auto 0;height:62%;background-size:cover;background-position:center;-webkit-mask-image:linear-gradient(#000 52%,transparent);mask-image:linear-gradient(#000 52%,transparent)}
+.pcb{position:absolute;top:16px;right:16px;z-index:2;width:48px;height:48px;border-radius:50%;border:0;background:#fff;display:grid;place-items:center;cursor:pointer}
+.pcb svg{width:21px;height:21px;fill:none;stroke:#1b1b1b;stroke-width:1.9;stroke-linejoin:round}
+.pci{position:relative;padding:150px 22px 22px}
+.pc .av{width:92px;height:92px;border:4px solid #fff;font-size:2.2rem}
+.pnm{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px}
+.pnm h2{margin:0;font-family:Manrope,system-ui,sans-serif;font-size:1.45rem;font-weight:600;letter-spacing:-.01em}
+.pedit{display:inline-flex;align-items:center;gap:6px;border:1px solid #e3e3e3;background:#fff;border-radius:99px;padding:6px 14px;font-size:.85rem;font-weight:600;cursor:pointer}
+.pedit svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linejoin:round}
+.ptl{margin-top:2px;font-size:.98rem}
+.pmeta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:6px;color:#8a8f8b;font-size:.92rem}
+.pmeta span{display:inline-flex;align-items:center;gap:6px}
+.pmeta svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.plo{margin-left:auto;border:1px solid #e3e3e3;background:#fff;border-radius:99px;padding:5px 14px;font-size:.82rem;font-weight:600;cursor:pointer}
+.pcf{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:24px;flex-wrap:wrap}
+.pst{display:flex}
+.pst>div{padding:0 20px;text-align:center;border-left:1px solid #e3e3e3;display:flex;flex-direction:column}
+.pst>div:first-child{padding-left:0;border-left:0}
+.pst b{font-size:1.1rem}.pst span{color:#8a8f8b;font-size:.85rem}
+.pbtn{border:0;border-radius:99px;background:#1b1b1b;color:#fff;padding:15px 34px;font-weight:700;font-size:1rem;cursor:pointer;transition:transform .2s}
+.pbtn:hover{transform:translateY(-2px)}
+@media(max-width:600px){.pbtn{width:100%}.pst>div{padding:0 14px}}
+.onprof .top .sv{display:none}
+
+/* ===== Upload cards: one per row, full width ===== */
+.ups{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:760px){.ups{grid-template-columns:repeat(auto-fill,minmax(340px,1fr))}}
+.ups .card .im{aspect-ratio:4/3}
+.ups .card h3{font-size:1.3rem}
+.ups .card .b{padding:8px 16px 16px}
+.prc{margin-top:8px}
+.stt{position:absolute;top:12px;left:12px;padding:4px 12px;border-radius:99px;font-size:.75rem;font-weight:700;color:#fff;background:#b8861b}
+.stt.Published{background:#1f7a4f}.stt.Rejected{background:#a33a2f}
+
+/* ===== Login / sign-up panel ===== */
+.au{position:relative;background:#201f21;border-radius:32px;overflow:hidden;max-width:520px;margin:0 auto}
+.au::after{content:"";position:absolute;right:0;top:150px;width:80px;height:80px;background:#fff}
+.au-top{background:#fff;height:150px;border-radius:0 0 0 80px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.au-top b{font-family:'Cormorant Garamond',Georgia,serif;font-size:1.6rem;color:#163D32}
+.au-body{position:relative;z-index:1;background:#201f21;border-radius:80px 0 0 0;border-top-right-radius:80px;border-top-left-radius:0;padding:34px 26px 28px;color:#fff}
+.au-tg{display:flex;background:#4a494b;border-radius:99px;padding:0}
+.au-tg button{flex:1;border:0;background:none;color:#b9b9bc;font-weight:600;font-size:1rem;padding:13px 0;border-radius:99px;cursor:pointer;transition:background .25s,color .25s}
+.au-tg button.on{background:#d9d9dc;color:#111}
+.au-n{color:#a9a9ad;font-size:.85rem;margin-top:16px}
+.au-f{margin-top:18px}
+.au-f label{display:block;color:#fff;font-weight:600;font-size:.95rem;margin:0}
+.au input{background:transparent;border:0;border-bottom:1px solid #3d3c3f;border-radius:0;color:#fff;padding:6px 0;min-height:46px;margin:0;box-shadow:none}
+.au input:focus{border-bottom-color:var(--gold);box-shadow:none}
+.au .err{color:#ff9e94}
+.au-b{width:100%;margin-top:26px;border:0;border-radius:16px;background:#fff;color:#111;font-weight:700;font-size:1rem;padding:16px;cursor:pointer;transition:transform .2s}
+.au-b:hover{transform:translateY(-2px)}
 </style>
 </head>
 <body>
@@ -248,7 +386,7 @@ nav button.on{background:rgba(255,255,255,.55);color:#111}
 <div id="home" class="page on"></div><div id="resorts" class="page"></div><div id="activities" class="page"></div><div id="detail" class="page"></div><div id="checkout" class="page"></div><div id="bookings" class="page"></div><div id="profile" class="page"></div>
 </main>
 <footer><div class="wrap"><b>Verdane</b> — demo hospitality platform<p class="sub" style="color:#b9cbc3;margin:8px 0 14px">Demo only: no real bookings, payments or hotel inventory. A real version needs a secure backend, database, auth and payment gateway.</p>
-<a data-info="About">About</a><a data-info="Contact">Contact</a><a data-info="Terms">Terms</a><a data-info="Privacy">Privacy</a></div></footer>
+<a data-info="About">About</a><a data-info="Contact">Contact</a><a data-info="Terms">Terms</a><a data-info="Privacy">Privacy</a><a onclick="adminPanel()">Admin (demo)</a></div></footer>
 <dialog id="dlg"></dialog><div class="toasts" id="toasts" aria-live="polite"></div>
 
 <script>
@@ -295,8 +433,9 @@ const DEF={profile:{name:'Aarav Nair',email:'aarav@example.com',phone:'+91 98765
  {id:'VRD-DEMO01',rid:'r2',guest:'Aarav Nair',in:'2026-12-10',out:'2026-12-13',room:'Deluxe',guests:2,total:0,status:'Upcoming'},
  {id:'VRD-DEMO02',rid:'r5',guest:'Aarav Nair',in:'2026-03-02',out:'2026-03-05',room:'Standard',guests:2,total:0,status:'Completed'}],props:[]};
 let S;try{S=JSON.parse(localStorage.getItem('verdane'))}catch(e){}
-if(!S)S=structuredClone(DEF);S.tickets=S.tickets||[];
+if(!S)S=structuredClone(DEF);S.tickets=S.tickets||[];S.prods=S.prods||[];S.account=S.account||null;S.session=!!(S.session&&S.account);
 const IMGS={}; /* uploaded images live in memory only; metadata persists (localStorage can't hold large images) */
+[...S.props,...S.prods].forEach(x=>{if(x.photos)IMGS[x.id]=x.photos});
 const save=()=>{try{localStorage.setItem('verdane',JSON.stringify(S))}catch(e){toast('Storage full — changes not saved')};if(typeof badge==='function'&&$('#bd'))badge()};
 const all=()=>[...SEED,...S.props.filter(p=>p.status==='Published')];
 const find=id=>[...SEED,...S.props].find(r=>r.id===id);
@@ -313,7 +452,7 @@ function confirmBox(msg,yes,label='Confirm'){modal('Please confirm',`<p>${msg}</
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 /* ===== Navigation ===== */
 function badge(){const lc=$('#lc');if(lc)lc.textContent=S.city||locMsg;const sb=$('#sb');if(sb)sb.textContent=S.favs.length||'';const n=S.bookings.filter(b=>b.status==='Upcoming').length+S.tickets.filter(t=>t.status==='Upcoming').length;$('#bd').textContent=n||''}
-function go(p){badge();document.body.classList.toggle('onhero',p==='home');$$('.page').forEach(x=>x.classList.toggle('on',x.id===p));$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===(p==='detail'||p==='checkout'?D.from:p)));({home:rHome,resorts:rResorts,activities:rActs,detail:rDetail,checkout:rCheckout,bookings:rBookings,profile:rProfile})[p]();scrollTo({top:0,behavior:'instant'});try{history.replaceState(null,'','#'+p)}catch(e){}}
+function go(p){badge();document.body.classList.toggle('onhero',p==='home');document.body.classList.toggle('onprof',p==='profile');$$('.page').forEach(x=>x.classList.toggle('on',x.id===p));$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===(p==='detail'||p==='checkout'?D.from:p)));({home:rHome,resorts:rResorts,activities:rActs,detail:rDetail,checkout:rCheckout,bookings:rBookings,profile:rProfile})[p]();scrollTo({top:0,behavior:'instant'});try{history.replaceState(null,'','#'+p)}catch(e){}}
 $$('nav button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 $$('[data-info]').forEach(a=>a.onclick=()=>modal(a.dataset.info,`<p>${a.dataset.info} page placeholder for this demo. Contact: hello@verdane.example (not a real inbox).</p>`));
 /* ===== Cards ===== */
@@ -325,21 +464,35 @@ function rHome(){const dests=[['Kerala','r1'],['Goa','r5'],['Munnar','r2'],['Way
 $('#home').innerHTML=`<header class="hero"><div class="hsl">${[0,4,1,7,2].map(k=>`<div class="sl" style='background-image:${SEED[k].img.replace('w=900','w=1600')}'></div>`).join('')}</div><div class="wrap"><h1>Discover Your Perfect Escape.</h1><p>Exceptional stays, breathtaking destinations, unforgettable experiences.</p><div class="hbtn"><button class="btn" onclick="go('resorts')">Explore Resorts</button><button class="btn o" onclick="go('activities')">Explore Activities</button></div><div class="hdots">${[0,1,2,3,4].map(i=>`<button aria-label="Show photo ${i+1}"></button>`).join('')}</div></div></header>
 <section><div class="wrap"><h2>${S.city?'Resorts near '+S.city:'Featured luxury resorts'}</h2><div class="grid hs">${[...all()].sort((a,b)=>S.city?((dist(a)??1e9)-(dist(b)??1e9)||b.rating-a.rating):b.rating-a.rating).slice(0,6).map(card).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><h2>Popular destinations</h2><div class="grid hs">${dests.map(([d,id])=>`<button class="dest" style='background-image:linear-gradient(0deg,#0008,#0000),${find(id).img}' onclick="searchFor('${d}')">${d}</button>`).join('')}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><h2>${S.city?'Activities near '+S.city:'Popular activities'}</h2><div class="grid hs">${[...ACTS].sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9)).slice(0,5).map(actCard).join('')}</div></div></section>
+<section style="padding-top:0"><div class="wrap"><h2>${S.city?'Activities near '+S.city:'Popular activities'}</h2><div class="grid hs">${allActs().sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9)).slice(0,5).map(actCard).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><h2>Recommended stays</h2><div class="grid hs">${all().slice(3).map(card).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="card b" style="background:var(--green);color:#fff;padding:32px"><h2 style="margin-bottom:8px">Exclusive offer: 15% off 3+ nights</h2><p class="sub" style="color:#cfe0d8;margin-bottom:16px">Demo offer for display. Use code STAY15 — not applied in this demo's pricing.</p><button class="btn" onclick="go('resorts')">Browse stays</button></div></div></section>`;
 heroStart()}
 let Q={q:'',max:20000,rating:0,type:'',am:[],sort:'pop',in:'',out:'',g:2};
 function searchFor(q,a='',b='',g=2){Q={...Q,q,in:a,out:b,g:+g};go('resorts')}
 /* ===== Resorts ===== */
+let AMOPEN=true,amTimer;
+function toggleAm(){clearTimeout(amTimer);AMOPEN=!AMOPEN;$('#amg').hidden=!AMOPEN;$('#amt').classList.toggle('open',AMOPEN);$('#amt').setAttribute('aria-expanded',AMOPEN)}
 function rResorts(){const el=$('#resorts');
-el.innerHTML=`<section style="padding-top:100px"><div class="wrap"><h2>Find your stay</h2><div class="bar"><input id="q" placeholder="Search name, city or state" value="${esc(Q.q)}" style="flex:2 1 240px"><select id="sort"><option value="near">Nearest to me</option><option value="pop">Most popular</option><option value="pl">Price: low to high</option><option value="ph">Price: high to low</option><option value="rt">Top rated</option></select><select id="ty"><option value="">All types</option>${TYPES.map(t=>`<option>${t}</option>`).join('')}</select><select id="rt"><option value="0">Any rating</option><option value="4">4.0+</option><option value="4.5">4.5+</option></select></div>
-<div class="bar"><label>Max price: <b id="pv">${money(Q.max)}</b><input type="range" id="mx" min="2000" max="20000" step="500" value="${Q.max}"></label></div>
-<div class="chips" style="margin-bottom:20px">${AMEN.map(a=>`<label><input type="checkbox" value="${a}" ${Q.am.includes(a)?'checked':''}>${a}</label>`).join('')}</div><div id="rg" class="grid"></div></div></section>`;
-$('#sort').value=Q.sort;$('#ty').value=Q.type;$('#rt').value=Q.rating;
-const upd=()=>{Q.q=$('#q').value;Q.sort=$('#sort').value;Q.type=$('#ty').value;Q.rating=+$('#rt').value;Q.max=+$('#mx').value;Q.am=$$('.chips input:checked').map(i=>i.value);$('#pv').textContent=money(Q.max);list()};
-$$('#resorts input,#resorts select').forEach(i=>i.oninput=upd);
-$('#rg').innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';setTimeout(list,250)}
+const I={search:'<circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/>',pin:'<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>',sl:'<path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h9M19 17h1"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="12" r="2.2"/><circle cx="16" cy="17" r="2.2"/>',star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',wal:'<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/><circle cx="16.5" cy="14.5" r="1"/>',chv:'<path d="m6 9 6 6 6-6"/>',
+'Pool':'<path d="M8 4v9M15 4v9M8 7h7M8 10h7"/><path d="M3 16c2 0 2-1.5 4.5-1.5S10 16 12 16s2.5-1.5 4.5-1.5S19 16 21 16M3 20c2 0 2-1.5 4.5-1.5S10 20 12 20s2.5-1.5 4.5-1.5S19 20 21 20"/>',
+'Wi-Fi':'<path d="M2.5 9a14 14 0 0 1 19 0M6 12.5a9 9 0 0 1 12 0M9.2 16a4.5 4.5 0 0 1 5.6 0"/><circle cx="12" cy="19.5" r="1"/>',
+'Restaurant':'<path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10M17 21V3c-2.5 1.5-3.5 4.5-3.5 8H17"/>',
+'Spa':'<path d="M12 20c-4 0-8-3-9-8 3 0 5.5 1 7 3 .5-4 2-7 2-10 0 3 1.5 6 2 10 1.5-2 4-3 7-3-1 5-5 8-9 8z"/>',
+'Parking':'<path d="M4 17v-5l2.5-5h11L20 12v5zM4 17v3M20 17v3M4 12h16"/><circle cx="8" cy="14.5" r=".8"/><circle cx="16" cy="14.5" r=".8"/>',
+'Beach access':'<path d="M12 21V10M12 10c-3-3-6-2-8 0 3-1 5 0 8 0zM12 10c3-3 6-2 8 0-3-1-5 0-8 0zM12 10c-1-3 0-5 2-6 0 2-1 4-2 6zM12 10c1-3 0-5-2-6 0 2 1 4 2 6z"/><path d="M4 21h16"/>'};
+const ico=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${I[k]}</svg>`;
+el.innerHTML=`<section style="padding-top:100px"><div class="wrap"><h2 class="fh">Find <em>your</em> stay</h2><span class="rule"></span>
+<label class="fld" style="margin-top:28px"><span class="ic">${ico('search')}</span><input id="q" placeholder="Search name, city or state" value="${esc(Q.q)}"></label>
+<div class="fgrid"><label class="fld sel"><span class="ic">${ico('pin')}</span><select id="sort"><option value="near">Nearest to me</option><option value="pop">Most popular</option><option value="pl">Price: low to high</option><option value="ph">Price: high to low</option><option value="rt">Top rated</option></select><svg class="chv" viewBox="0 0 24 24">${I.chv}</svg></label>
+<label class="fld sel"><span class="ic">${ico('sl')}</span><select id="ty"><option value="">All types</option>${TYPES.map(t=>`<option>${t}</option>`).join('')}</select><svg class="chv" viewBox="0 0 24 24">${I.chv}</svg></label>
+</div>
+<div class="fld price"><div class="prow"><span class="ic">${ico('wal')}</span><span>Max price: <b id="pv">${money(Q.max)}</b></span></div><input type="range" id="mx" min="2000" max="20000" step="500" value="${Q.max}" aria-label="Maximum price"></div>
+<button type="button" class="amh${AMOPEN?' open':''}" id="amt" aria-expanded="${AMOPEN}" onclick="toggleAm()"><span>Amenities<b class="cnt" id="amc">${Q.am.length?' \u00b7 '+Q.am.length+' selected':''}</b></span><svg viewBox="0 0 24 24">${I.chv}</svg></button><div class="chips amg" id="amg" ${AMOPEN?'':'hidden'}>${AMEN.map(a=>`<label class="amt"><input type="checkbox" value="${a}" ${Q.am.includes(a)?'checked':''}>${ico(a)}<span>${a}</span></label>`).join('')}</div><div id="rg" class="grid" style="margin-top:34px"></div></div></section>`;
+$('#sort').value=Q.sort;$('#ty').value=Q.type;
+const upd=()=>{clearTimeout(amTimer);Q.q=$('#q').value;Q.sort=$('#sort').value;Q.type=$('#ty').value;Q.max=+$('#mx').value;Q.am=$$('.chips input:checked').map(i=>i.value);$('#amc').textContent=Q.am.length?' \u00b7 '+Q.am.length+' selected':'';$('#pv').textContent=money(Q.max);$('#mx').style.setProperty('--p',((Q.max-2000)/18000*100)+'%');list()};
+$$('#resorts input,#resorts select').forEach(i=>i.oninput=upd);$('#mx').style.setProperty('--p',((Q.max-2000)/18000*100)+'%');
+$('#rg').innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';setTimeout(list,250);clearTimeout(amTimer);if(AMOPEN)amTimer=setTimeout(()=>{if(AMOPEN&&$('#amg')&&$('#resorts').classList.contains('on'))toggleAm()},3000)}
 function list(){let L=all().filter(r=>(`${r.name} ${r.city} ${r.state}`).toLowerCase().includes(Q.q.toLowerCase())&&r.price<=Q.max&&r.rating>=Q.rating&&(!Q.type||r.type===Q.type)&&Q.am.every(a=>r.am.includes(a)));
 const k={near:(a,b)=>(dist(a)??1e9)-(dist(b)??1e9)||b.pop-a.pop,pop:(a,b)=>b.pop-a.pop,pl:(a,b)=>a.price-b.price,ph:(a,b)=>b.price-a.price,rt:(a,b)=>b.rating-a.rating}[Q.sort];L.sort(k);
 const g=$('#rg');if(g)g.innerHTML=L.length?L.map(card).join(''):`<div class="empty" style="grid-column:1/-1"><h3>No stays match yet</h3><p>Try a higher price limit or remove an amenity filter.</p><button class="btn g sm" style="margin-top:12px" onclick="Q={q:'',max:20000,rating:0,type:'',am:[],sort:'pop',in:'',out:'',g:2};rResorts()">Clear filters</button></div>`}
@@ -375,37 +528,75 @@ function bView(id){const b=S.bookings.find(x=>x.id===id),r=find(b.rid)||{name:'R
 function bPrint(id){const b=S.bookings.find(x=>x.id===id),r=find(b.rid)||{name:'Removed property'};const w=open('','_blank');if(!w)return toast('Allow pop-ups to print');w.document.write(`<title>${id}</title><body style="font-family:sans-serif;max-width:560px;margin:40px auto"><h1>Verdane — Booking summary</h1><p><b>DEMO document, not a real reservation.</b></p><h2>${esc(r.name)}</h2><p>Reference: ${id}<br>Guest: ${esc(b.guest)}<br>${b.in} to ${b.out} · ${b.room} · ${b.guests} guests<br>Estimated total: ${money(b.total)}</p>`);w.document.close();w.print()}
 function bCancel(id){confirmBox('Cancel this booking? This demo action can\u2019t be undone.',()=>{S.bookings.find(x=>x.id===id).status='Cancelled';save();toast('Booking cancelled');BT='Cancelled';rBookings()},'Yes, cancel')}
 /* ===== Profile ===== */
-function rProfile(){const p=S.profile;
-$('#profile').innerHTML=`<section style="padding-top:100px"><div class="wrap"><div class="prof"><div class="av" style="${p.photo?`background-image:url('${p.photo}')`:''}">${p.photo?'':esc(p.name[0]||'?')}</div><div style="flex:1;min-width:200px"><h2 style="margin:0">${esc(p.name)}</h2><div class="sub">${esc(p.email)} · ${esc(p.phone)} · ${esc(p.loc)}</div><div class="row"><button class="btn g sm" onclick="editProfile()">Edit profile</button><button class="btn o sm" onclick="go('bookings')">My bookings</button><button class="btn o sm" onclick="confirmBox('Log out of this demo? Your data stays saved in this browser.',()=>toast('Logged out (demo)'),'Log out')">Log out</button></div></div><button class="btn" onclick="propForm()">List Your Property</button></div>
-<h2>My properties</h2>${S.props.length?`<div class="grid">${S.props.map(r=>`<article class="card"><div class="im" style='background-image:${cover(r)}'></div><div class="b"><span class="tag ${r.status=='Published'?'ok':r.status=='Pending'?'wait':'no'}">${r.status}</span><h3>${esc(r.name)}</h3><div class="sub">${esc(r.city)}, ${esc(r.state)} · ${money(r.price)}/night</div><div class="row"><button class="btn g sm" onclick="detail('${r.id}')">Preview</button><button class="btn o sm" onclick="propForm('${r.id}')">Edit</button><button class="btn d sm" onclick="delProp('${r.id}')">Delete</button></div><div class="row"><label style="font-size:.75rem">Demo review:</label>${['Pending','Published','Rejected'].map(s=>`<button class="btn o sm" onclick="setStatus('${r.id}','${s}')">${s}</button>`).join('')}</div></div></article>`).join('')}</div>`:`<div class="empty"><p>You haven\u2019t listed a property yet. Add one and it appears here and on the Resorts page once published.</p></div>`}
+let AUTHTAB=S.account?'in':'new';
+function rProfile(){const p=S.profile,A=S.session?S.account:null;
+const ups=A?[...S.props.filter(x=>x.owner===A.id||x.owner==='me').map(r=>({k:'stay',r})),...S.prods.filter(x=>x.owner===A.id).map(r=>({k:'act',r}))].sort((a,b)=>(b.r.created||0)-(a.r.created||0)):[];
+const upc=({k,r})=>{const st=k==='stay',km=kmTxt(r);
+return `<article class="card up"><div class="im" style='background-image:${st?cover(r):actImg(r)}'><span class="stt ${r.status}">${r.status}</span><span class="rate">\u2605 ${r.rating.toFixed(1)}</span></div><div class="b"><h3>${esc(r.name)}</h3><div class="sub">${esc(r.city)}${st?', '+esc(r.state):''} \u00b7 ${st?esc(r.type):esc(r.cat)}${km?' \u00b7 '+km:''}</div>${r.status==='Rejected'?'<p class="sub" style="margin-top:4px">Rejected by admin. Edit and resubmit to request a new review.</p>':r.status==='Pending'?'<p class="sub" style="margin-top:4px">Waiting for admin review. It goes public once approved.</p>':''}<div class="prc"><span class="price">${money(r.price)}<span class="sub">${st?' /night':' /ticket'}</span></span></div><div class="row"><button class="btn g sm" onclick="${st?'detail':'aDetail'}('${r.id}')">View Details</button><button class="btn o sm" onclick="uploadForm('${r.id}')">Edit</button><button class="btn d sm" onclick="${st?'delProp':'delProd'}('${r.id}')">Delete</button></div></div></article>`};
+const fa=(id,l,t='text')=>`<div class="au-f"><label for="${id}">${l}</label><input id="${id}" type="${t}" autocomplete="${t=='tel'?'tel':t=='password'?(AUTHTAB=='new'?'new-password':'current-password'):'organization'}"></div><div class="err" id="e_${id}"></div>`;
+const auth=`<div class="au"><div class="au-top"><svg viewBox="0 0 64 64" width="54" height="54" aria-hidden="true"><path d="M10 16 32 52 54 16" stroke="#163D32" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="9" r="5" fill="#C5A46D"/></svg><b>Verdane</b></div><div class="au-body"><div class="au-tg"><button class="${AUTHTAB=='in'?'on':''}" onclick="AUTHTAB='in';rProfile()">Login</button><button class="${AUTHTAB=='new'?'on':''}" onclick="AUTHTAB='new';rProfile()">Sign up</button></div><p class="au-n">Guests don\u2019t need an account. Business owners sign up to upload stays, activities and products.</p>
+<form id="af" novalidate>${AUTHTAB=='new'?`${fa('ab','Business name')}${fa('ap','Phone number','tel')}${fa('apw','Password','password')}${fa('apc','Confirm password','password')}`:`${fa('ap','Phone number','tel')}${fa('apw','Password','password')}`}<button class="au-b">${AUTHTAB=='new'?'Sign up':'Login'}</button></form><p class="au-n" style="margin-top:14px">Demo only: only a salted hash of your password is kept, in this browser. Real accounts need a secure backend.</p></div></div>`;
+const sv=d=>`<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
+const pub=ups.filter(u=>u.r.status==='Published').length,pend=ups.filter(u=>u.r.status==='Pending').length;
+const stats=A?[[ups.length,'Uploads'],[pub,'Published'],[pend,'Pending']]:[[S.bookings.length,'Bookings'],[S.tickets.length,'Tickets'],[S.favs.length,'Saved']];
+$('#profile').innerHTML=`<section style="padding-top:100px"><div class="wrap">
+<div class="pc"><div class="pcv" style='background-image:${SEED[1].img}'></div>
+<button class="pcb" aria-label="Saved resorts" onclick="showSaved()">${sv('<path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4-7 4V4a1 1 0 0 1 1-1z"/>')}${S.favs.length?`<span class="sb">${S.favs.length}</span>`:''}</button>
+<div class="pci"><div class="av" style="${p.photo?`background-image:url('${p.photo}')`:''}">${p.photo?'':esc(p.name[0]||'?')}</div>
+<div class="pnm"><h2>${esc(p.name)}</h2><button class="pedit" onclick="editProfile()">${sv('<path d="M4 20h4L19 9l-4-4L4 16z"/>')}Edit</button></div>
+<div class="ptl">${A?esc(A.business):'Guest profile \u00b7 no sign-up needed to book'}</div>
+<div class="pmeta"><span>${sv('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>')}${A?esc(A.type||'Business owner'):'Guest'}</span><span>${sv('<path d="M12 21s7-6.2 7-11a7 7 0 0 0-14 0c0 4.8 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/>')}${esc(A?(A.city||p.loc):p.loc)}</span>${A?`<button class="plo" onclick="logout()">Log out</button>`:''}</div>
+<div class="pcf"><div class="pst">${stats.map(x=>`<div><b>${x[0]}</b><span>${x[1]}</span></div>`).join('')}</div>${A?`<button class="pbtn" onclick="uploadForm()">+ Upload</button>`:''}</div></div></div>
+${A?`<h2 style="margin-top:36px">My uploads${ups.length?` (${ups.length})`:''}</h2>${ups.length?`<div class="ups">${ups.map(upc).join('')}</div>`:'<div class="empty"><p>Nothing uploaded yet. Tap + Upload to add a stay, activity or product. Your latest upload always shows first.</p></div>'}`:`<div id="authp" style="margin-top:24px">${auth}</div>`}
 <h2 style="margin-top:36px">Saved resorts</h2>${S.favs.length?`<div class="grid">${S.favs.map(find).filter(Boolean).map(card).join('')}</div>`:'<div class="empty"><p>Tap the heart on any resort to save it here.</p></div>'}
-<p class="sub" style="margin-top:30px">Demo notice: this profile is not real authentication. Ownership, roles and listing moderation must be enforced by a secure backend.</p></div></section>`}
+<p class="sub" style="margin-top:30px">Demo notice: business accounts here are not secure authentication and no password is stored. Real accounts, ownership and moderation need a secure backend.</p></div></section>`;
+if(!A){$('#af').onsubmit=async e=>{e.preventDefault();$$('#af .err').forEach(x=>x.textContent='');const v=id=>$('#'+id).value.trim(),E={},ph=v('ap').replace(/\D/g,''),pw=$('#apw').value,show=()=>{for(const k in E)$('#e_'+k).textContent=E[k]};
+if(!(window.crypto&&crypto.subtle)){$('#e_apw').textContent='Passwords need a secure (https) page';return}
+if(AUTHTAB==='in'){if(ph.length<10)E.ap='Enter your phone number';if(!pw)E.apw='Enter your password';if(Object.keys(E).length){show();return}
+const X=S.account;if(!X||!X.hash||X.phone.replace(/\D/g,'')!==ph||await hashPw(pw,X.salt)!==X.hash){$('#e_apw').textContent='Phone number or password is wrong';return}
+S.session=true;save();toast('Signed in');rProfile();return}
+if(!v('ab'))E.ab='Required';if(ph.length<10)E.ap='Enter a valid phone number';if(pw.length<6)E.apw='At least 6 characters';else if(pw!==$('#apc').value)E.apc='Passwords don\'t match';
+if(S.account&&S.account.hash&&!E.ap)E.ap='An account already exists here. Use Login.';
+if(Object.keys(E).length){show();return}
+const salt=newSalt();S.account={id:'acc_'+Date.now().toString(36),business:v('ab'),phone:v('ap'),salt,hash:await hashPw(pw,salt)};S.session=true;save();toast('Account created');rProfile()}}}
+const hx=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+async function hashPw(pw,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pw),'PBKDF2',false,['deriveBits']);return hx(await crypto.subtle.deriveBits({name:'PBKDF2',salt:new TextEncoder().encode(salt),iterations:120000,hash:'SHA-256'},k,256))}
+const newSalt=()=>hx(crypto.getRandomValues(new Uint8Array(16)));
+function logout(){confirmBox('Log out of your business account? Your uploads stay saved in this browser.',()=>{S.session=false;AUTHTAB='in';save();toast('Logged out');rProfile()},'Log out')}
+/* ===== Upload form (stay or activity, 3 photos at 3:4) ===== */
+function crop34(file){return new Promise((res,rej)=>{const fr=new FileReader();fr.onload=()=>{const im=new Image();im.onload=()=>{const W=600,H=800,c=document.createElement('canvas');c.width=W;c.height=H;const x=c.getContext('2d'),r=Math.max(W/im.width,H/im.height),w=im.width*r,h=im.height*r;x.drawImage(im,(W-w)/2,(H-h)/2,w,h);res(c.toDataURL('image/jpeg',.8))};im.onerror=rej;im.src=fr.result};fr.onerror=rej;fr.readAsDataURL(file)})}
+function uploadForm(eid){const A=S.account;if(!S.session||!A)return go('profile');
+const ex=eid?(S.props.find(p=>p.id===eid)||S.prods.find(p=>p.id===eid)):null,wasStay=ex?!!S.props.find(p=>p.id===eid):true,ph=ex?[...(IMGS[eid]||[])]:[];
+const f=(id,l,v='',t='text',x='')=>`<div><label>${l}<input id="${id}" type="${t}" value="${esc(v)}" ${x}></label><div class="err" id="e_${id}"></div></div>`;
+const slot=(i,t)=>`<div><label class="slot${i==0?' main':''}" id="sl${i}"><input type="file" accept="image/*" data-i="${i}" style="display:none"><span>${t}</span></label></div>`;
+modal(ex?'Edit upload':'New upload',`<form id="uf" novalidate><div class="two"><div><label>Listing type<select id="ut" ${ex?'disabled':''}><option value="stay">Stay (resort, hotel, villa)</option><option value="act">Activity or product</option></select></label></div>${f('un','Name',ex?.name)}<div><label>Category<select id="uc"></select></label></div>${f('ucy','Place (city)',ex?.city||A.city||'')}<div class="so">${f('ust','State',ex?.state)}</div>${f('upr','Price (\u20b9 per night or ticket)',ex?.price,'number','min="100"')}<div class="so">${f('urm','Number of rooms',ex?.rooms,'number','min="1"')}</div><div class="so">${f('ucp','Max guests',ex?.cap,'number','min="1"')}</div><div class="ao">${f('udu','Duration (e.g. 2 hrs)',ex?.dur)}</div></div>
+<label style="margin-top:12px">Description<textarea id="ude" rows="3">${esc(ex?.desc)}</textarea></label><div class="err" id="e_ude"></div>
+<div class="so"><p class="sub" style="margin-top:10px">Amenities</p><div class="chips" id="uam">${AMEN.map(a=>`<label><input type="checkbox" value="${a}" ${ex?.am?.includes(a)?'checked':''}>${a}</label>`).join('')}</div><div class="err" id="e_uam"></div></div>
+<p class="sub" style="margin:14px 0 8px"><b>Photos</b> \u00b7 size 3:4 (portrait). Add 3: 1 main + 2 additional. Photos are cropped to 3:4 automatically.</p><div class="slots">${slot(0,'Main photo')}${slot(1,'Additional 1')}${slot(2,'Additional 2')}</div><div class="err" id="e_uph"></div>
+<div class="row"><button class="btn g">${ex?'Save changes':'Upload'}</button></div></form>`);
+const ut=$('#ut');ut.value=wasStay?'stay':'act';
+const apply=()=>{const st=ut.value==='stay';$('#uc').innerHTML=(st?TYPES:ACAT).map(c=>`<option>${c}</option>`).join('');if(ex)$('#uc').value=ex.type||ex.cat;$$('#uf .so').forEach(x=>x.style.display=st?'':'none');$$('#uf .ao').forEach(x=>x.style.display=st?'none':'')};ut.onchange=apply;apply();
+const paint=i=>{const l=$('#sl'+i);if(ph[i]){l.style.backgroundImage=`url("${ph[i]}")`;l.classList.add('set')}};[0,1,2].forEach(paint);
+$$('#uf .slot input').forEach(inp=>inp.onchange=async()=>{const fl=inp.files[0];if(!fl)return;if(!fl.type.startsWith('image/')||fl.size>8e6){$('#e_uph').textContent='Choose an image under 8 MB';return}$('#e_uph').textContent='';try{ph[+inp.dataset.i]=await crop34(fl);paint(+inp.dataset.i)}catch(e){$('#e_uph').textContent='Could not read that image'}});
+$('#uf').onsubmit=ev=>{ev.preventDefault();$$('#uf .err').forEach(x=>x.textContent='');const v=id=>$('#'+id).value.trim(),st=ut.value==='stay',E={};
+['un','ucy','ude'].forEach(k=>{if(!v(k))E[k]='Required'});if(!(+v('upr')>=100))E.upr='Enter 100 or more';
+if(st){if(!v('ust'))E.ust='Required';if(!(+v('urm')>=1))E.urm='At least 1';if(!(+v('ucp')>=1))E.ucp='At least 1';if(!$$('#uam input:checked').length)E.uam='Select at least one amenity'}else if(!v('udu'))E.udu='Required';
+if(![0,1,2].every(i=>ph[i]))E.uph='Add all 3 photos (1 main + 2 additional)';
+if(Object.keys(E).length){for(const k in E)$('#e_'+k).textContent=E[k];toast('Please fix the highlighted fields');return}
+const id=eid||(st?'p':'x')+Date.now(),cat=$('#uc').value,base={id,name:v('un'),city:v('ucy'),price:+v('upr'),desc:v('ude'),owner:A.id,status:'Pending',created:ex?.created||Date.now(),photos:ph.slice(0,3),phone:A.phone,email:A.email||'',rating:ex?.rating||4.5};
+IMGS[id]=base.photos;
+if(st){const o={...base,type:cat,country:'India',state:v('ust'),address:v('ucy')+', '+v('ust'),map:'',rooms:+v('urm'),cap:+v('ucp'),roomTypes:'Standard, Deluxe, Suite',cin:'14:00',cout:'11:00',am:$$('#uam input:checked').map(i=>i.value),rules:'Free cancellation up to 48 hours before check-in (sample policy).',cover:0,pop:ex?.pop||50,c:['#163D32','#C5A46D'],img:scene('#163D32','#C5A46D',5,'pool'),kind:'pool'};const k=S.props.findIndex(p=>p.id===id);k<0?S.props.unshift(o):S.props[k]=o}
+else{const o={...base,cat,dur:v('udu'),c:['#2f7d6d','#d9c58f'],img:scene('#2f7d6d','#d9c58f',7,ACATK[cat]),kind:ACATK[cat]};const k=S.prods.findIndex(p=>p.id===id);k<0?S.prods.unshift(o):S.prods[k]=o}
+save();dlg.close();toast('Uploaded. Status: '+base.status);rProfile()}}
+function setProdStatus(id,st){S.prods.find(p=>p.id===id).status=st;save();toast('Marked '+st);rProfile()}
+function delProd(id){confirmBox('Delete this listing permanently?',()=>{S.prods=S.prods.filter(p=>p.id!==id);delete IMGS[id];save();toast('Listing deleted');rProfile()},'Delete')}
 function editProfile(){const p=S.profile;modal('Edit profile',`<form id="pf" novalidate><div class="two"><div><label>Full name<input id="pn" value="${esc(p.name)}"></label><div class="err"></div></div><div><label>Email<input id="pe" value="${esc(p.email)}"></label><div class="err"></div></div><div><label>Phone<input id="pp" value="${esc(p.phone)}"></label></div><div><label>Location<input id="pl" value="${esc(p.loc)}"></label></div></div><label style="margin-top:12px">Profile photo<input type="file" id="ph" accept="image/*"></label><div class="err" id="pherr"></div><div class="row"><button class="btn g">Save changes</button></div></form>`);
 let photo=p.photo;$('#ph').onchange=e=>{const f=e.target.files[0];if(!f)return;if(!f.type.startsWith('image/')||f.size>1e6){$('#pherr').textContent='Choose an image under 1 MB';e.target.value='';return}const fr=new FileReader();fr.onload=()=>photo=fr.result;fr.readAsDataURL(f)};
 $('#pf').onsubmit=e=>{e.preventDefault();const n=$('#pn').value.trim(),m=$('#pe').value.trim();if(!n||!/^\S+@\S+\.\S+$/.test(m))return toast('Enter your name and a valid email');S.profile={name:n,email:m,phone:$('#pp').value.trim(),loc:$('#pl').value.trim(),photo};save();dlg.close();toast('Profile updated');rProfile()}}
 function setStatus(id,s){find(id).status=s;save();toast('Listing marked '+s);rProfile()}
 function delProp(id){confirmBox('Delete this listing permanently?',()=>{S.props=S.props.filter(p=>p.id!==id);delete IMGS[id];S.favs=S.favs.filter(f=>f!==id);save();toast('Listing deleted');rProfile()},'Delete')}
 /* ===== List a property ===== */
-function propForm(eid){const e=eid?find(eid):{};let imgs=[...(IMGS[eid]||[])],cov=e.cover||0;
-const f=(id,l,v='',t='text',x='')=>`<div><label>${l}<input id="${id}" type="${t}" value="${esc(v)}" ${x}></label><div class="err" id="e_${id}"></div></div>`;
-modal(eid?'Edit listing':'List your property',`<form id="lf" novalidate><div class="two">${f('n','Property name',e.name)}<div><label>Property type<select id="t">${TYPES.map(t=>`<option ${e.type==t?'selected':''}>${t}</option>`).join('')}</select></label></div>${f('co','Country',e.country||'India')}${f('st','State',e.state)}${f('ci','City',e.city)}${f('ad','Full address',e.address)}${f('mp','Map URL (https://…)',e.map,'url')}${f('ph','Contact number',e.phone,'tel')}${f('em','Contact email',e.email,'email')}${f('pr','Price per night (₹)',e.price,'number','min="500"')}${f('rm','Number of rooms',e.rooms,'number','min="1"')}${f('cp','Max guest capacity',e.cap,'number','min="1"')}${f('rty','Room types (comma separated)',e.roomTypes||'Standard, Deluxe, Suite')}${f('cin','Check-in time',e.cin||'14:00','time')}${f('cout','Check-out time',e.cout||'11:00','time')}</div>
-<label style="margin-top:12px">Description<textarea id="d" rows="3">${esc(e.desc)}</textarea></label><div class="err" id="e_d"></div>
-<p class="sub" style="margin-top:10px">Amenities</p><div class="chips" id="am">${AMEN.map(a=>`<label><input type="checkbox" value="${a}" ${e.am?.includes(a)?'checked':''}>${a}</label>`).join('')}</div><div class="err" id="e_am"></div>
-<label style="margin-top:10px">Rules & cancellation policy<textarea id="ru" rows="2">${esc(e.rules)}</textarea></label><div class="err" id="e_ru"></div>
-<label style="margin-top:10px">Photos (JPG/PNG, up to 6, 1.5 MB each)<input type="file" id="im" accept="image/*" multiple></label><div class="err" id="e_im"></div><div class="pv" id="pimg"></div><p class="sub">Tap a photo to make it the cover. Photos are kept in memory for this session only; real storage needs a backend or cloud bucket.</p>
-<div class="row"><button class="btn g">${eid?'Save listing':'Submit listing'}</button></div></form>`);
-const draw=()=>$('#pimg').innerHTML=imgs.map((u,i)=>`<div class="${i==cov?'cov':''}" style='background-image:url("${u}")' data-i="${i}" title="Set as cover"></div>`).join('');draw();
-$('#pimg').onclick=ev=>{const i=ev.target.dataset.i;if(i!=null){cov=+i;draw()}};
-$('#im').onchange=ev=>{$('#e_im').textContent='';[...ev.target.files].forEach(file=>{if(imgs.length>=6)return $('#e_im').textContent='Maximum 6 photos';if(!file.type.startsWith('image/')||file.size>1.5e6)return $('#e_im').textContent='Only images under 1.5 MB are allowed';const fr=new FileReader();fr.onload=()=>{imgs.push(fr.result);draw()};fr.readAsDataURL(file)})};
-$('#lf').onsubmit=ev=>{ev.preventDefault();$$('#lf .err').forEach(x=>x.textContent='');const v=id=>$('#'+id).value.trim(),E={};
-['n','co','st','ci','ad','rty','ru','d'].forEach(k=>{if(!v(k))E[k]='Required'});
-if(!/^https?:\/\/\S+/.test(v('mp')))E.mp='Enter a full map URL starting with https://';if(v('ph').replace(/\D/g,'').length<10)E.ph='Enter a valid contact number';if(!/^\S+@\S+\.\S+$/.test(v('em')))E.em='Enter a valid email';
-if(!(+v('pr')>=500))E.pr='Enter a price of ₹500 or more';if(!(+v('rm')>=1))E.rm='At least 1 room';if(!(+v('cp')>=1))E.cp='At least 1 guest';if(!v('cin')||!v('cout'))E.cin='Set both times';
-if(!$$('#am input:checked').length)E.am='Select at least one amenity';if(!imgs.length)E.im='Add at least one photo';
-if(Object.keys(E).length){for(const k in E){const el=$('#e_'+k);if(el)el.textContent=E[k]}toast('Please fix the highlighted fields');return}
-const id=eid||'p'+Date.now(),o={id,name:v('n'),type:$('#t').value,country:v('co'),state:v('st'),city:v('ci'),address:v('ad'),map:v('mp'),phone:v('ph'),email:v('em'),price:+v('pr'),rooms:+v('rm'),cap:+v('cp'),roomTypes:v('rty'),cin:v('cin'),cout:v('cout'),desc:v('d'),am:$$('#am input:checked').map(i=>i.value),rules:v('ru'),cover:cov,rating:e.rating||4.5,pop:e.pop||50,c:['#163D32','#C5A46D'],img:scene('#163D32','#C5A46D',5),owner:'me',status:e.status||'Pending'};
-IMGS[id]=imgs;eid?S.props[S.props.findIndex(p=>p.id===id)]=o:S.props.unshift(o);save();
-modal('Listing submitted',`<p><b>${esc(o.name)}</b> is now <span class="tag wait">${o.status}</span>.</p><p class="sub" style="margin:8px 0">Use the demo review buttons on your profile to mark it Published; it then appears on the Resorts page.</p><div class="row"><button class="btn" onclick="dlg.close();rProfile()">View my properties</button></div>`);rProfile()}}
+
 /* ===== Activities & tickets ===== */
 const ACTS=[
  ['a1','Backwater Houseboat Cruise','Alleppey','Water','4 hrs',1800,4.8,['#2f7d6d','#d9c58f'],'Glide through palm-lined canals with a Kerala lunch on board.'],
@@ -419,11 +610,14 @@ const ACTS=[
 ].map((a,i)=>({id:a[0],name:a[1],city:a[2],cat:a[3],dur:a[4],price:a[5],rating:a[6],c:a[7],desc:a[8],img:pic(APH[i],scene(a[7][0],a[7][1],i+11,ACATK[a[3]])),kind:ACATK[a[3]]}));
 const ACAT=['Water','Nature','Culture','Wellness','Adventure'],ATAX=.05;
 let AC={q:'',cat:''};
-const actOf=id=>ACTS.find(a=>a.id===id);
+const allActs=()=>[...ACTS,...S.prods.filter(p=>p.status==='Published')];
+const actOf=id=>[...ACTS,...S.prods].find(a=>a.id===id);
+const NOACT={name:'Removed activity',city:'',img:'none'};
+const actImg=a=>IMGS[a.id]&&IMGS[a.id][0]?`url("${IMGS[a.id][0]}")`:a.img;
 function rActs(){$('#activities').innerHTML=`<section style="padding-top:100px"><div class="wrap"><h2>Activities & tickets</h2><input id="aq" placeholder="Search activity or destination" value="${esc(AC.q)}" style="margin-bottom:14px"><div class="tabs">${['',...ACAT].map(c=>`<button class="${c===AC.cat?'on':''}" onclick="AC.cat='${c}';rActs()">${c||'All'}</button>`).join('')}</div><div id="ag" class="grid"></div></div></section>`;
 $('#aq').oninput=e=>{AC.q=e.target.value;actList()};actList()}
-function actCard(a){return `<article class="card"><div class="im" style='background-image:${a.img}'><span class="rate">★ ${a.rating.toFixed(1)}</span></div><div class="b"><h3>${esc(a.name)}</h3><div class="sub">${esc(a.city)} · ${a.dur}${kmTxt(a)?' · '+kmTxt(a):''}</div><p class="sub" style="margin:6px 0">${esc(a.desc)}</p><span class="tag">${a.cat}</span><div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><span class="price">${money(a.price)}<span class="sub"> /ticket</span></span><button class="btn g sm" onclick="aDetail('${a.id}')">View Details</button></div></div></article>`}
-function actList(){const L=ACTS.filter(a=>(a.name+' '+a.city).toLowerCase().includes(AC.q.toLowerCase())&&(!AC.cat||a.cat===AC.cat)).sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9));
+function actCard(a){return `<article class="card"><div class="im" style='background-image:${actImg(a)}'><span class="rate">★ ${a.rating.toFixed(1)}</span></div><div class="b"><h3>${esc(a.name)}</h3><div class="sub">${esc(a.city)} · ${a.dur}${kmTxt(a)?' · '+kmTxt(a):''}</div><p class="sub" style="margin:6px 0">${esc(a.desc)}</p><span class="tag">${a.cat}</span><div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px"><span class="price">${money(a.price)}<span class="sub"> /ticket</span></span><button class="btn g sm" onclick="aDetail('${a.id}')">View Details</button></div></div></article>`}
+function actList(){const L=allActs().filter(a=>(a.name+' '+a.city).toLowerCase().includes(AC.q.toLowerCase())&&(!AC.cat||a.cat===AC.cat)).sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9));
 $('#ag').innerHTML=L.length?L.map(actCard).join(''):'<div class="empty" style="grid-column:1/-1"><h3>No activities found</h3><p>Try another destination or choose All.</p></div>'}
 function tForm(id){const a=actOf(id);const slots=['9:00 AM','1:00 PM','4:30 PM'];
 modal('Book tickets — '+esc(a.name),`<form id="tf" novalidate><div class="two"><div><label>Date<input type="date" id="td" min="${today()}"></label><div class="err" id="e_td"></div></div><div><label>Time slot<select id="ts">${slots.map(x=>`<option>${x}</option>`).join('')}</select></label></div><div><label>Adults (${money(a.price)})<input type="number" id="ta" min="1" max="10" value="2"></label><div class="err" id="e_ta"></div></div><div><label>Children (50% price)<input type="number" id="tc" min="0" max="10" value="0"></label><div class="err" id="e_tc"></div></div><div><label>Name<input id="tn" value="${esc(S.profile.name)}"></label><div class="err" id="e_tn"></div></div><div><label>Email<input id="te" type="email" value="${esc(S.profile.email)}"></label><div class="err" id="e_te"></div></div></div><div class="sum" id="ts2"></div><p class="sub">Demo only: no payment is taken and no real ticket is issued.</p><div class="row"><button class="btn g">Review &amp; confirm</button></div></form>`);
@@ -435,9 +629,9 @@ if(!d)E.td='Pick a date';else if(d<today())E.td='Date can\u2019t be in the past'
 if(!$('#tn').value.trim())E.tn='Enter a name';if(!/^\S+@\S+\.\S+$/.test($('#te').value))E.te='Enter a valid email';
 if(Object.keys(E).length){for(const k in E)$('#e_'+k).textContent=E[k];return}
 CK={kind:'ticket',id,d,sl:$('#ts').value,nm:$('#tn').value.trim(),email:$('#te').value.trim(),t};dlg.close();go('checkout')}}
-function tix(){return S.tickets.length?S.tickets.map(t=>{const a=actOf(t.aid);return `<div class="bk"><div class="im" style='background-image:${a.img}'></div><div class="in"><span class="tag ${t.status=='Upcoming'?'wait':'no'}">${t.status}</span><h3>${esc(a.name)}</h3><div class="sub">${esc(a.city)} · Ref ${t.id}<br>${t.date} · ${t.slot} · ${t.adults} adult, ${t.children} child · ${esc(t.guest)}</div><div class="price" style="margin-top:4px">${money(t.total)}</div><div class="row"><button class="btn g sm" onclick="tPrint('${t.id}')">Print ticket</button>${t.status=='Upcoming'?`<button class="btn d sm" onclick="tCancel('${t.id}')">Cancel</button>`:''}</div></div></div>`}).join(''):`<div class="empty"><h3>No tickets yet</h3><p>Book an activity and your tickets will show up here.</p><button class="btn g sm" style="margin-top:12px" onclick="go('activities')">Browse activities</button></div>`}
+function tix(){return S.tickets.length?S.tickets.map(t=>{const a=actOf(t.aid)||NOACT;return `<div class="bk"><div class="im" style='background-image:${a.img}'></div><div class="in"><span class="tag ${t.status=='Upcoming'?'wait':'no'}">${t.status}</span><h3>${esc(a.name)}</h3><div class="sub">${esc(a.city)} · Ref ${t.id}<br>${t.date} · ${t.slot} · ${t.adults} adult, ${t.children} child · ${esc(t.guest)}</div><div class="price" style="margin-top:4px">${money(t.total)}</div><div class="row"><button class="btn g sm" onclick="tPrint('${t.id}')">Print ticket</button>${t.status=='Upcoming'?`<button class="btn d sm" onclick="tCancel('${t.id}')">Cancel</button>`:''}</div></div></div>`}).join(''):`<div class="empty"><h3>No tickets yet</h3><p>Book an activity and your tickets will show up here.</p><button class="btn g sm" style="margin-top:12px" onclick="go('activities')">Browse activities</button></div>`}
 function tCancel(id){confirmBox('Cancel these tickets? This demo action can\u2019t be undone.',()=>{S.tickets.find(x=>x.id===id).status='Cancelled';save();toast('Tickets cancelled');rBookings()},'Yes, cancel')}
-function tPrint(id){const t=S.tickets.find(x=>x.id===id),a=actOf(t.aid),w=open('','_blank');if(!w)return toast('Allow pop-ups to print');w.document.write(`<title>${id}</title><body style="font-family:sans-serif;max-width:560px;margin:40px auto"><h1>Verdane — Activity ticket</h1><p><b>DEMO document, not a valid ticket.</b></p><h2>${esc(a.name)}</h2><p>Reference: ${id}<br>${esc(t.guest)}<br>${t.date}, ${t.slot}<br>${t.adults} adult, ${t.children} child<br>Estimated total: ${money(t.total)}</p>`);w.document.close();w.print()}
+function tPrint(id){const t=S.tickets.find(x=>x.id===id),a=actOf(t.aid)||NOACT,w=open('','_blank');if(!w)return toast('Allow pop-ups to print');w.document.write(`<title>${id}</title><body style="font-family:sans-serif;max-width:560px;margin:40px auto"><h1>Verdane — Activity ticket</h1><p><b>DEMO document, not a valid ticket.</b></p><h2>${esc(a.name)}</h2><p>Reference: ${id}<br>${esc(t.guest)}<br>${t.date}, ${t.slot}<br>${t.adults} adult, ${t.children} child<br>Estimated total: ${money(t.total)}</p>`);w.document.close();w.print()}
 /* ===== Detail page (separate page, same file) ===== */
 let D={kind:'resort',id:'',from:'resorts'};
 function detail(id){const c=$('.page.on').id;D={kind:'resort',id,from:c==='detail'?D.from:c};go('detail')}
@@ -490,6 +684,12 @@ locMsg='Detecting\u2026';badge();
 navigator.geolocation.getCurrentPosition(p=>{const here=[p.coords.latitude,p.coords.longitude];let best='',bd=1e9;for(const c in CITIES){const d=hav(here,CITIES[c]);if(d<bd){bd=d;best=c}}
 S.city=best;save();Q.sort='near';badge();if(manual)toast('Showing places near '+best);const pg=$('.page.on').id;if(['home','resorts','activities'].includes(pg))go(pg)},
 ()=>{locMsg='Location off';badge();if(manual)toast('Allow location access in your browser to see nearby places')},{timeout:10000,maximumAge:600000})}
+/* ===== Admin review (demo, not secure) ===== */
+function adminPanel(){const rank={Pending:0,Published:1,Rejected:2};
+const L=[...S.props.map(r=>({k:'stay',r})),...S.prods.map(r=>({k:'act',r}))].sort((a,b)=>rank[a.r.status]-rank[b.r.status]||(b.r.created||0)-(a.r.created||0));
+const row=({k,r})=>`<div class="bk" style="align-items:center;margin-bottom:10px"><div class="im" style='background-image:${k==='stay'?cover(r):actImg(r)};width:84px;height:84px;min-height:84px'></div><div class="in"><span class="tag ${r.status=='Published'?'ok':r.status=='Pending'?'wait':'no'}">${r.status}</span><span class="tag">${k==='stay'?'Stay':'Activity'}</span><div><b>${esc(r.name)}</b></div><div class="sub">${esc(r.city)} \u00b7 ${money(r.price)} \u00b7 by ${esc(S.account&&r.owner===S.account.id?S.account.business:'a business owner')}</div><div class="sub">${esc((r.desc||'').slice(0,90))}</div><div class="row"><button class="btn g sm" onclick="adminSet('${r.id}','Published')">Approve</button><button class="btn d sm" onclick="adminSet('${r.id}','Rejected')">Reject</button></div></div></div>`;
+modal('Admin review (demo)',`<p class="sub" style="margin-bottom:12px">Demo only. This is not secure admin access; real moderation needs an admin login on a secure backend.</p>${L.length?L.map(row).join(''):'<div class="empty"><p>No uploads to review yet.</p></div>'}`)}
+function adminSet(id,st){const x=S.props.find(p=>p.id===id)||S.prods.find(p=>p.id===id);if(!x)return;x.status=st;save();toast(st==='Published'?'Approved and published':'Rejected');adminPanel();if($('#profile').classList.contains('on'))rProfile()}
 /* ===== Init ===== */
 go(['home','resorts','activities','bookings','profile'].includes(location.hash.slice(1))?location.hash.slice(1):'home');
 if(S.city)Q.sort='near';
