@@ -481,6 +481,29 @@ nav button.on{background:rgba(255,255,255,.55);color:#111}
 .tile{min-height:64px;flex-direction:row;gap:10px;border-radius:22px;font-size:.92rem;padding:0 10px}
 .tile svg{width:24px;height:24px}
 .tl{margin:14px 0}
+
+/* ===== Home search results + filter panel ===== */
+[hidden]{display:none!important}
+#home.hsearch .tl,#home.hsearch .ads,#home.hsearch .adots,#home.hsearch .hsec{display:none}
+.hfp{background:#fff;border:1px solid #ece7da;border-radius:26px;padding:6px 16px 16px;margin:12px 0}
+.hlb{margin:14px 0 8px;font-weight:700;font-size:.9rem;color:var(--ink)}
+.hlb b{color:#1f5a40}
+.hch{display:flex;flex-wrap:wrap;gap:8px}
+.hch button{border:1px solid #e3e3e3;background:#fff;border-radius:99px;padding:8px 16px;font-weight:600;font-size:.88rem;cursor:pointer;transition:background .25s,color .25s}
+.hch button.on{background:var(--green);border-color:var(--green);color:#fff}
+.hfp select{background:#f5f2ea;border-color:transparent}
+.hfp input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:8px;min-height:0;padding:0;margin:14px 0 6px;border:0;border-radius:99px;background:linear-gradient(to right,#2d6a4f var(--p,100%),#e4e6df var(--p,100%));cursor:pointer}
+.hfp input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:26px;height:26px;border-radius:50%;background:#2d6a4f;border:3px solid #fff;box-shadow:0 2px 10px #0003}
+.hfp input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#2d6a4f;border:3px solid #fff}
+.hrh{display:flex;justify-content:space-between;align-items:center;margin:14px 0 4px}
+.hclr{border:1px solid #e3e3e3;background:#fff;border-radius:99px;padding:6px 14px;font-weight:600;cursor:pointer}
+.hrt{margin:14px 0 8px}
+.hg{grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:900px){.hg{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}}
+.hg .card .b{padding:2px 10px 12px}
+.hg .card.go h3{font-size:1rem;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hg .card .sub{font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hg .card .price{font-size:.98rem;margin-top:4px}
 </style>
 </head>
 <body>
@@ -575,15 +598,21 @@ function fav(id){const i=S.favs.indexOf(id);i<0?S.favs.push(id):S.favs.splice(i,
 /* ===== Home ===== */
 function rHome(){const dests=[['Kerala','r1'],['Goa','r5'],['Munnar','r2'],['Wayanad','r3'],['Kovalam','r8'],['Jaipur','r6'],['Manali','r7'],['Kozhikode','r4']];
 $('#home').innerHTML=`<section class="htop"><div class="wrap"><p class="hi1">Hi${S.profile.name?', '+esc(S.profile.name.split(' ')[0]):''}! \ud83d\udc4b</p><h1 class="hi2">Find your perfect escape</h1>
-<form class="hsr" id="hsr"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="hq" placeholder="Search resort, place or activity" enterkeyhint="search" autocomplete="off"><span class="vr"></span><button type="button" class="hfl" aria-label="Filters" onclick="go('resorts')"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h9M19 17h1"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="12" r="2.2"/><circle cx="16" cy="17" r="2.2"/></svg></button></form>
+<form class="hsr" id="hsr"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="hq" placeholder="Search resort, place or activity" enterkeyhint="search" autocomplete="off"><span class="vr"></span><button type="button" class="hfl" aria-label="Filters" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h9M19 17h1"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="12" r="2.2"/><circle cx="16" cy="17" r="2.2"/></svg></button></form>
+<div class="hfp" id="hfp" hidden><p class="hlb">Show</p><div class="hch" data-k="show">${[['all','All'],['res','Resorts'],['act','Activities']].map(([v,l])=>`<button type="button" data-v="${v}" class="${HQ.show===v?'on':''}">${l}</button>`).join('')}</div>
+<p class="hlb">Resort type</p><div class="hch" data-k="type">${['','Resort','Hotel','Villa','Homestay'].map(v=>`<button type="button" data-v="${v}" class="${HQ.type===v?'on':''}">${v||'Any'}</button>`).join('')}</div>
+<p class="hlb">Sort by</p><select id="hsort"><option value="near">Nearest to me</option><option value="pop">Most popular</option><option value="pl">Price: low to high</option><option value="ph">Price: high to low</option><option value="rt">Top rated</option></select>
+<p class="hlb">Max price: <b id="hpv">${money(HQ.max)}</b></p><input type="range" id="hmx" min="2000" max="20000" step="500" value="${HQ.max}" aria-label="Maximum price">
+<p class="hlb">Amenities</p><div class="hch" data-k="am">${AMEN.map(a=>`<button type="button" data-v="${a}" class="${HQ.am.includes(a)?'on':''}">${a}</button>`).join('')}</div>
+<button type="button" class="btn o sm" id="hreset" style="margin-top:14px">Reset filters</button></div><div id="hres" hidden></div>
 <div class="tl"><button class="tile on" onclick="go('resorts')"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Explore Resorts</span></button><button class="tile" onclick="go('activities')"><svg viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 11v2M13 17v2"/></svg><span>Explore Activities</span></button></div>
 <div class="ads" id="ads">${[...all()].sort((a,b)=>b.rating-a.rating).slice(0,5).map((r,i)=>`<article class="ad" onclick="detail('${r.id}')" style='background-image:${cover(r)}'><span class="adt">${['Featured','Top rated','Exclusive offer','Popular','New'][i]}</span><div class="adb"><div><b>${esc(r.name)}</b><span>${esc(r.city)}, ${esc(r.state)}</span></div><em>${money(r.price)}</em></div></article>`).join('')}</div><div class="adots">${[0,1,2,3,4].map(i=>`<i class="${i?'':'on'}"></i>`).join('')}</div></div></section>
-<section><div class="wrap"><h2>${S.city?'Resorts near '+S.city:'Featured luxury resorts'}</h2><div class="grid hs">${[...all()].sort((a,b)=>S.city?((dist(a)??1e9)-(dist(b)??1e9)||b.rating-a.rating):b.rating-a.rating).slice(0,6).map(card).join('')}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><h2>Popular destinations</h2><div class="grid hs">${dests.map(([d,id])=>`<button class="dest" style='background-image:linear-gradient(0deg,#0008,#0000),${find(id).img}' onclick="searchFor('${d}')">${d}</button>`).join('')}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><h2>${S.city?'Activities near '+S.city:'Popular activities'}</h2><div class="grid hs">${allActs().sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9)).slice(0,5).map(actCard).join('')}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><h2>Recommended stays</h2><div class="grid hs">${all().slice(3).map(card).join('')}</div></div></section>
-<section style="padding-top:0"><div class="wrap"><div class="card b" style="background:var(--green);color:#fff;padding:32px"><h2 style="margin-bottom:8px">Exclusive offer: 15% off 3+ nights</h2><p class="sub" style="color:#cfe0d8;margin-bottom:16px">Demo offer for display. Use code STAY15 — not applied in this demo's pricing.</p><button class="btn" onclick="go('resorts')">Browse stays</button></div></div></section>`;
-adStart();$('#hsr').onsubmit=e=>{e.preventDefault();searchFor($('#hq').value.trim())}}
+<section class="hsec"><div class="wrap"><h2>${S.city?'Resorts near '+S.city:'Featured luxury resorts'}</h2><div class="grid hs">${[...all()].sort((a,b)=>S.city?((dist(a)??1e9)-(dist(b)??1e9)||b.rating-a.rating):b.rating-a.rating).slice(0,6).map(card).join('')}</div></div></section>
+<section class="hsec" style="padding-top:0"><div class="wrap"><h2>Popular destinations</h2><div class="grid hs">${dests.map(([d,id])=>`<button class="dest" style='background-image:linear-gradient(0deg,#0008,#0000),${find(id).img}' onclick="searchFor('${d}')">${d}</button>`).join('')}</div></div></section>
+<section class="hsec" style="padding-top:0"><div class="wrap"><h2>${S.city?'Activities near '+S.city:'Popular activities'}</h2><div class="grid hs">${allActs().sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9)).slice(0,5).map(actCard).join('')}</div></div></section>
+<section class="hsec" style="padding-top:0"><div class="wrap"><h2>Recommended stays</h2><div class="grid hs">${all().slice(3).map(card).join('')}</div></div></section>
+<section class="hsec" style="padding-top:0"><div class="wrap"><div class="card b" style="background:var(--green);color:#fff;padding:32px"><h2 style="margin-bottom:8px">Exclusive offer: 15% off 3+ nights</h2><p class="sub" style="color:#cfe0d8;margin-bottom:16px">Demo offer for display. Use code STAY15 — not applied in this demo's pricing.</p><button class="btn" onclick="go('resorts')">Browse stays</button></div></div></section>`;
+adStart();hBind()}
 let Q={q:'',max:20000,rating:0,type:'',am:[],sort:'pop',in:'',out:'',g:2};
 function searchFor(q,a='',b='',g=2){Q={...Q,q,in:a,out:b,g:+g};go('resorts')}
 /* ===== Resorts ===== */
@@ -863,6 +892,23 @@ function adStart(){clearInterval(adT);const el=$('#ads');if(!el)return;adI=0;con
 el.addEventListener('scroll',()=>{adI=Math.round(el.scrollLeft/w());dots.forEach((d,k)=>d.classList.toggle('on',k===adI))},{passive:true});
 const run=()=>{clearInterval(adT);adT=setInterval(()=>{if(!$('#home').classList.contains('on')||!$('#ads'))return;el.scrollTo({left:((adI+1)%dots.length)*w(),behavior:'smooth'})},3500)};
 ['touchstart','pointerdown'].forEach(e=>el.addEventListener(e,()=>clearInterval(adT),{passive:true}));['touchend','pointerup'].forEach(e=>el.addEventListener(e,run,{passive:true}));run()}
+/* ===== Home: search + filters shown on the Home page ===== */
+let HQ={q:'',show:'all',type:'',max:20000,sort:'near',am:[]};
+function hFilter(){const q=HQ.q.trim().toLowerCase(),active=!!q||HQ.show!=='all'||!!HQ.type||HQ.max<20000||HQ.am.length>0;
+$('#home').classList.toggle('hsearch',active);$('#hres').hidden=!active;if(!active)return;
+const near=(a,b)=>(dist(a)??1e9)-(dist(b)??1e9),srt={near:(a,b)=>near(a,b)||b.pop-a.pop,pop:(a,b)=>b.pop-a.pop,pl:(a,b)=>a.price-b.price,ph:(a,b)=>b.price-a.price,rt:(a,b)=>b.rating-a.rating}[HQ.sort];
+const R=HQ.show==='act'?[]:all().filter(r=>(`${r.name} ${r.city} ${r.state} ${r.type}`).toLowerCase().includes(q)&&r.price<=HQ.max&&(!HQ.type||r.type===HQ.type)&&HQ.am.every(a=>r.am.includes(a))).sort(srt);
+const A=(HQ.show==='res'||HQ.type||HQ.am.length)?[]:allActs().filter(a=>(`${a.name} ${a.city} ${a.cat}`).toLowerCase().includes(q)&&a.price<=HQ.max).sort(near);
+const n=R.length+A.length;
+$('#hres').innerHTML=`<div class="hrh"><b>${n} result${n==1?'':'s'}</b><button type="button" class="hclr" onclick="HQ={q:'',show:'all',type:'',max:20000,sort:'near',am:[]};rHome()">Clear</button></div>${R.length?`<h3 class="hrt">Resorts</h3><div class="grid hg">${R.map(card).join('')}</div>`:''}${A.length?`<h3 class="hrt">Activities</h3><div class="grid hg">${A.map(actCard).join('')}</div>`:''}${n?'':'<div class="empty"><h3>No matches</h3><p>Try another word or reset the filters.</p></div>'}`}
+function hBind(){const q=$('#hq');q.value=HQ.q;q.oninput=e=>{HQ.q=e.target.value;hFilter()};
+$('#hsr').onsubmit=e=>{e.preventDefault();q.blur();hFilter()};
+const fb=$('.hfl');fb.onclick=()=>{const p=$('#hfp');p.hidden=!p.hidden;fb.setAttribute('aria-expanded',!p.hidden)};
+$$('.hch').forEach(g=>g.onclick=e=>{const b=e.target.closest('button');if(!b)return;const k=g.dataset.k,v=b.dataset.v;if(k==='am'){HQ.am=HQ.am.includes(v)?HQ.am.filter(x=>x!==v):[...HQ.am,v];b.classList.toggle('on')}else{HQ[k]=v;$$('button',g).forEach(x=>x.classList.toggle('on',x===b))}hFilter()});
+const so=$('#hsort');so.value=HQ.sort;so.onchange=()=>{HQ.sort=so.value;hFilter()};
+const mx=$('#hmx'),pf=()=>mx.style.setProperty('--p',((HQ.max-2000)/18000*100)+'%');pf();mx.oninput=()=>{HQ.max=+mx.value;$('#hpv').textContent=money(HQ.max);pf();hFilter()};
+$('#hreset').onclick=()=>{HQ={q:'',show:'all',type:'',max:20000,sort:'near',am:[]};rHome()};
+hFilter()}
 /* ===== Init ===== */
 go(['home','resorts','activities','bookings','profile'].includes(location.hash.slice(1))?location.hash.slice(1):'home');
 if(S.city)Q.sort='near';
