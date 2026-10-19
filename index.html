@@ -448,6 +448,39 @@ nav button.on{background:rgba(255,255,255,.55);color:#111}
  .au-tg::before,.au-tg::after{content:none}
  .hs>.dest{flex:0 0 calc((100vw - 24px)/1.5);height:170px}
 }
+@media(max-width:759px){.tabs::before{content:none;display:none}}
+@media(max-width:759px){.tabs::after{content:none;display:none}}
+
+/* ===== Home: app-style top ===== */
+.htop{padding:92px 0 10px}
+.htop .wrap{max-width:720px}
+.hi1{font-size:1.05rem;color:var(--ink);margin-bottom:2px}
+.hi2{font-size:clamp(2.1rem,8vw,3rem);font-weight:600;line-height:1.05;margin-bottom:18px}
+.hsr{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #ece7da;border-radius:99px;padding:6px 8px 6px 20px;margin:0}
+.hsr svg{width:22px;height:22px;flex:none;fill:none;stroke:#3d4640;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.hsr input{border:0;background:transparent;margin:0;padding:0;min-height:48px;flex:1;min-width:0;font-size:1rem;box-shadow:none}
+.hsr input:focus{border:0;box-shadow:none}
+.hsr .vr{width:1px;height:26px;background:#e3e3e3}
+.hfl{border:0;background:none;width:46px;height:46px;border-radius:50%;display:grid;place-items:center;cursor:pointer}
+.tl{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}
+.tile{border:1px solid #ece7da;background:#fff;border-radius:26px;min-height:116px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:.95rem;cursor:pointer;color:var(--ink);transition:transform .2s}
+.tile:active{transform:scale(.97)}
+.tile svg{width:28px;height:28px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.tile.on{background:var(--green);color:#fff;border-color:var(--green)}
+.ads{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory}
+.ad{flex:0 0 100%;scroll-snap-align:center;aspect-ratio:4/3.2;border-radius:30px;background-size:cover;background-position:center;position:relative;overflow:hidden;cursor:pointer}
+.adt{position:absolute;top:14px;left:14px;background:#163d32d9;color:#fff;padding:6px 14px;border-radius:99px;font-size:.8rem;font-weight:700}
+.adb{position:absolute;left:0;right:0;bottom:0;padding:48px 18px 16px;background:linear-gradient(transparent,#0b1f19d9);color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:12px}
+.adb b{display:block;font-size:1.15rem;font-weight:700;line-height:1.2}
+.adb span{font-size:.85rem;opacity:.85}
+.adb em{font-style:normal;font-weight:800;font-size:1.15rem;white-space:nowrap}
+.adots{display:flex;justify-content:center;gap:8px;margin-top:12px}
+.adots i{width:7px;height:7px;border-radius:50%;background:#cfd3c9;transition:width .3s,background .3s}
+.adots i.on{width:22px;border-radius:99px;background:#1b1b1b}
+@media(max-width:759px){.htop{padding-top:84px}.htop .wrap{padding:0 12px}}
+.tile{min-height:64px;flex-direction:row;gap:10px;border-radius:22px;font-size:.92rem;padding:0 10px}
+.tile svg{width:24px;height:24px}
+.tl{margin:14px 0}
 </style>
 </head>
 <body>
@@ -532,7 +565,7 @@ function confirmBox(msg,yes,label='Confirm'){modal('Please confirm',`<p>${msg}</
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 /* ===== Navigation ===== */
 function badge(){const lc=$('#lc');if(lc)lc.textContent=S.city||locMsg;const sb=$('#sb');if(sb)sb.textContent=S.favs.length||'';const n=S.bookings.filter(b=>bTab(b)==='Upcoming').length+S.tickets.filter(t=>bTab(t)==='Upcoming').length+(S.session&&S.account?ownItems().filter(x=>x.b.status==='Pending').length:0);$('#bd').textContent=n||''}
-function go(p){badge();document.body.classList.toggle('onhero',p==='home');document.body.classList.toggle('onprof',p==='profile');$$('.page').forEach(x=>x.classList.toggle('on',x.id===p));$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===(p==='detail'||p==='checkout'?D.from:p)));({home:rHome,resorts:rResorts,activities:rActs,detail:rDetail,checkout:rCheckout,bookings:rBookings,profile:rProfile})[p]();scrollTo({top:0,behavior:'instant'});try{history.replaceState(null,'','#'+p)}catch(e){}}
+function go(p){badge();document.body.classList.toggle('onhero',false);document.body.classList.toggle('onprof',p==='profile');$$('.page').forEach(x=>x.classList.toggle('on',x.id===p));$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.p===(p==='detail'||p==='checkout'?D.from:p)));({home:rHome,resorts:rResorts,activities:rActs,detail:rDetail,checkout:rCheckout,bookings:rBookings,profile:rProfile})[p]();scrollTo({top:0,behavior:'instant'});try{history.replaceState(null,'','#'+p)}catch(e){}}
 $$('nav button').forEach(b=>b.onclick=()=>go(b.dataset.p));
 $$('[data-info]').forEach(a=>a.onclick=()=>modal(a.dataset.info,`<p>${a.dataset.info} page placeholder for this demo. Contact: hello@verdane.example (not a real inbox).</p>`));
 /* ===== Cards ===== */
@@ -541,13 +574,16 @@ function card(r){return `<article class="card go" onclick="detail('${r.id}')" ro
 function fav(id){const i=S.favs.indexOf(id);i<0?S.favs.push(id):S.favs.splice(i,1);save();toast(i<0?'Saved to favourites':'Removed from favourites');const p=$('.page.on').id;go(p)}
 /* ===== Home ===== */
 function rHome(){const dests=[['Kerala','r1'],['Goa','r5'],['Munnar','r2'],['Wayanad','r3'],['Kovalam','r8'],['Jaipur','r6'],['Manali','r7'],['Kozhikode','r4']];
-$('#home').innerHTML=`<header class="hero"><div class="hsl">${[0,4,1,7,2].map(k=>`<div class="sl" style='background-image:${SEED[k].img.replace('w=900','w=1600')}'></div>`).join('')}</div><div class="wrap"><h1>Discover Your Perfect Escape.</h1><p>Exceptional stays, breathtaking destinations, unforgettable experiences.</p><div class="hbtn"><button class="btn" onclick="go('resorts')">Explore Resorts</button><button class="btn o" onclick="go('activities')">Explore Activities</button></div><div class="hdots">${[0,1,2,3,4].map(i=>`<button aria-label="Show photo ${i+1}"></button>`).join('')}</div></div></header>
+$('#home').innerHTML=`<section class="htop"><div class="wrap"><p class="hi1">Hi${S.profile.name?', '+esc(S.profile.name.split(' ')[0]):''}! \ud83d\udc4b</p><h1 class="hi2">Find your perfect escape</h1>
+<form class="hsr" id="hsr"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="hq" placeholder="Search resort, place or activity" enterkeyhint="search" autocomplete="off"><span class="vr"></span><button type="button" class="hfl" aria-label="Filters" onclick="go('resorts')"><svg viewBox="0 0 24 24"><path d="M4 7h9M19 7h1M4 12h3M13 12h7M4 17h9M19 17h1"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="12" r="2.2"/><circle cx="16" cy="17" r="2.2"/></svg></button></form>
+<div class="tl"><button class="tile on" onclick="go('resorts')"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Explore Resorts</span></button><button class="tile" onclick="go('activities')"><svg viewBox="0 0 24 24"><path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z"/><path d="M13 5v2M13 11v2M13 17v2"/></svg><span>Explore Activities</span></button></div>
+<div class="ads" id="ads">${[...all()].sort((a,b)=>b.rating-a.rating).slice(0,5).map((r,i)=>`<article class="ad" onclick="detail('${r.id}')" style='background-image:${cover(r)}'><span class="adt">${['Featured','Top rated','Exclusive offer','Popular','New'][i]}</span><div class="adb"><div><b>${esc(r.name)}</b><span>${esc(r.city)}, ${esc(r.state)}</span></div><em>${money(r.price)}</em></div></article>`).join('')}</div><div class="adots">${[0,1,2,3,4].map(i=>`<i class="${i?'':'on'}"></i>`).join('')}</div></div></section>
 <section><div class="wrap"><h2>${S.city?'Resorts near '+S.city:'Featured luxury resorts'}</h2><div class="grid hs">${[...all()].sort((a,b)=>S.city?((dist(a)??1e9)-(dist(b)??1e9)||b.rating-a.rating):b.rating-a.rating).slice(0,6).map(card).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><h2>Popular destinations</h2><div class="grid hs">${dests.map(([d,id])=>`<button class="dest" style='background-image:linear-gradient(0deg,#0008,#0000),${find(id).img}' onclick="searchFor('${d}')">${d}</button>`).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><h2>${S.city?'Activities near '+S.city:'Popular activities'}</h2><div class="grid hs">${allActs().sort((a,b)=>(dist(a)??1e9)-(dist(b)??1e9)).slice(0,5).map(actCard).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><h2>Recommended stays</h2><div class="grid hs">${all().slice(3).map(card).join('')}</div></div></section>
 <section style="padding-top:0"><div class="wrap"><div class="card b" style="background:var(--green);color:#fff;padding:32px"><h2 style="margin-bottom:8px">Exclusive offer: 15% off 3+ nights</h2><p class="sub" style="color:#cfe0d8;margin-bottom:16px">Demo offer for display. Use code STAY15 — not applied in this demo's pricing.</p><button class="btn" onclick="go('resorts')">Browse stays</button></div></div></section>`;
-heroStart()}
+adStart();$('#hsr').onsubmit=e=>{e.preventDefault();searchFor($('#hq').value.trim())}}
 let Q={q:'',max:20000,rating:0,type:'',am:[],sort:'pop',in:'',out:'',g:2};
 function searchFor(q,a='',b='',g=2){Q={...Q,q,in:a,out:b,g:+g};go('resorts')}
 /* ===== Resorts ===== */
@@ -819,8 +855,14 @@ const lastTab={};let tabRaf=0;
 function enhanceTabs(){$$('.tabs,.au-tg').forEach(t=>{if(!t.offsetParent)return;const on=t.querySelector('button.on');if(!on)return;let ind=t.querySelector('.ti');const fresh=!ind;if(fresh){ind=document.createElement('i');ind.className='ti';t.prepend(ind)}
 const pg=t.closest('.page'),key=(pg?pg.id:'x')+'#'+[...(pg||document).querySelectorAll('.tabs,.au-tg')].indexOf(t),to={l:on.offsetLeft,w:on.offsetWidth},from=lastTab[key];
 if(fresh&&from){t.scrollLeft=from.sl||0;ind.style.transition='none';ind.style.transform=`translateX(${from.l}px)`;ind.style.width=from.w+'px';void ind.offsetWidth;ind.style.transition=''}
-ind.style.transform=`translateX(${to.l}px)`;ind.style.width=to.w+'px';let sl=0;if(t.scrollWidth>t.clientWidth+2){sl=Math.max(0,Math.min(t.scrollWidth-t.clientWidth,on.offsetLeft-(t.clientWidth-on.offsetWidth)/2));t.scrollTo({left:sl,behavior:'smooth'})}to.sl=sl;lastTab[key]=to})}
+ind.style.transform=`translateX(${to.l}px)`;ind.style.width=to.w+'px';let sl=0;if(from&&t.scrollWidth>t.clientWidth+2){sl=Math.max(0,Math.min(t.scrollWidth-t.clientWidth,on.offsetLeft-(t.clientWidth-on.offsetWidth)/2));t.scrollTo({left:sl,behavior:'smooth'})}to.sl=sl;lastTab[key]=to})}
 new MutationObserver(()=>{cancelAnimationFrame(tabRaf);tabRaf=requestAnimationFrame(enhanceTabs)}).observe($('main'),{childList:true,subtree:true});
+/* ===== Home ad carousel ===== */
+let adT,adI=0;
+function adStart(){clearInterval(adT);const el=$('#ads');if(!el)return;adI=0;const dots=$$('.adots i'),w=()=>el.clientWidth+12;
+el.addEventListener('scroll',()=>{adI=Math.round(el.scrollLeft/w());dots.forEach((d,k)=>d.classList.toggle('on',k===adI))},{passive:true});
+const run=()=>{clearInterval(adT);adT=setInterval(()=>{if(!$('#home').classList.contains('on')||!$('#ads'))return;el.scrollTo({left:((adI+1)%dots.length)*w(),behavior:'smooth'})},3500)};
+['touchstart','pointerdown'].forEach(e=>el.addEventListener(e,()=>clearInterval(adT),{passive:true}));['touchend','pointerup'].forEach(e=>el.addEventListener(e,run,{passive:true}));run()}
 /* ===== Init ===== */
 go(['home','resorts','activities','bookings','profile'].includes(location.hash.slice(1))?location.hash.slice(1):'home');
 if(S.city)Q.sort='near';
