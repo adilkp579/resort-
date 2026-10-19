@@ -440,6 +440,14 @@ nav button.on{background:rgba(255,255,255,.55);color:#111}
 .tpr{display:grid;grid-template-columns:1fr 110px 42px;gap:8px;margin-bottom:8px}
 .tpr input{margin:0}
 .tpr button{border:1px solid #e3e3e3;background:#fff;border-radius:12px;font-size:1.3rem;cursor:pointer}
+
+/* ===== Selected tab stays centred while the others move ===== */
+@media(max-width:759px){
+ .tabs{width:calc(100% - 16px);margin:0 8px 16px;max-width:none;scroll-snap-type:none}
+ .tabs::before,.tabs::after{content:"";flex:0 0 38%}
+ .au-tg::before,.au-tg::after{content:none}
+ .hs>.dest{flex:0 0 calc((100vw - 24px)/1.5);height:170px}
+}
 </style>
 </head>
 <body>
@@ -810,8 +818,8 @@ save();BBT='Incoming';toast('Demo booking request added');rBookings()}
 const lastTab={};let tabRaf=0;
 function enhanceTabs(){$$('.tabs,.au-tg').forEach(t=>{if(!t.offsetParent)return;const on=t.querySelector('button.on');if(!on)return;let ind=t.querySelector('.ti');const fresh=!ind;if(fresh){ind=document.createElement('i');ind.className='ti';t.prepend(ind)}
 const pg=t.closest('.page'),key=(pg?pg.id:'x')+'#'+[...(pg||document).querySelectorAll('.tabs,.au-tg')].indexOf(t),to={l:on.offsetLeft,w:on.offsetWidth},from=lastTab[key];
-if(fresh&&from){ind.style.transition='none';ind.style.transform=`translateX(${from.l}px)`;ind.style.width=from.w+'px';void ind.offsetWidth;ind.style.transition=''}
-ind.style.transform=`translateX(${to.l}px)`;ind.style.width=to.w+'px';lastTab[key]=to})}
+if(fresh&&from){t.scrollLeft=from.sl||0;ind.style.transition='none';ind.style.transform=`translateX(${from.l}px)`;ind.style.width=from.w+'px';void ind.offsetWidth;ind.style.transition=''}
+ind.style.transform=`translateX(${to.l}px)`;ind.style.width=to.w+'px';let sl=0;if(t.scrollWidth>t.clientWidth+2){sl=Math.max(0,Math.min(t.scrollWidth-t.clientWidth,on.offsetLeft-(t.clientWidth-on.offsetWidth)/2));t.scrollTo({left:sl,behavior:'smooth'})}to.sl=sl;lastTab[key]=to})}
 new MutationObserver(()=>{cancelAnimationFrame(tabRaf);tabRaf=requestAnimationFrame(enhanceTabs)}).observe($('main'),{childList:true,subtree:true});
 /* ===== Init ===== */
 go(['home','resorts','activities','bookings','profile'].includes(location.hash.slice(1))?location.hash.slice(1):'home');
